@@ -1,0 +1,725 @@
+{
+ "meta": {
+  "rho": 0.3,
+  "dt": 2e-05,
+  "delta": 0.24482135039843245,
+  "tau": 0.06382204809576952
+ },
+ "R_LE": {
+  "bundle": "LE",
+  "eps": 0.0,
+  "redistribution_rule": "legacy_hybrid",
+  "redistribution_schedule": "every_step",
+  "dead_point_rule": "legacy_lagged",
+  "n_steps_requested": 25,
+  "n_steps_completed": 25,
+  "stop_reason": null,
+  "timeline_errors": [],
+  "regular_redist_invocations": 25,
+  "post_removal_redist_events": 1,
+  "events": [
+   {
+    "step": 10,
+    "n_removed": 64,
+    "survivors_inner": 0,
+    "deleted_ids": [
+     128,
+     129,
+     130,
+     131,
+     132,
+     133,
+     134,
+     135,
+     136,
+     137,
+     138,
+     139,
+     140,
+     141,
+     142,
+     143,
+     144,
+     145,
+     146,
+     147,
+     148,
+     149,
+     150,
+     151,
+     152,
+     153,
+     154,
+     155,
+     156,
+     157,
+     158,
+     159,
+     160,
+     161,
+     162,
+     163,
+     164,
+     165,
+     166,
+     167,
+     168,
+     169,
+     170,
+     171,
+     172,
+     173,
+     174,
+     175,
+     176,
+     177,
+     178,
+     179,
+     180,
+     181,
+     182,
+     183,
+     184,
+     185,
+     186,
+     187,
+     188,
+     189,
+     190,
+     191
+    ],
+    "R_in_pre": 0.1375727840669474,
+    "margin_min_removed": -0.0007246541397112338,
+    "margin_min_kept": 2.3212296972950504,
+    "state": "single_closed",
+    "area_jump_deletion": 0.05936316647302409,
+    "area_jump_post_removal_redist": 2.4503276627285686e-05
+   }
+  ],
+  "first_event": 10,
+  "extinction_certificate": {
+   "loop_index": 1,
+   "n_removed": 64,
+   "hole_area_pre": -0.05936316647302393,
+   "area_jump": 0.05936316647302409
+  },
+  "requires_reconstruction": false,
+  "pending_topology_events": [],
+  "support_states_tail": [
+   [
+    22,
+    "single_closed"
+   ],
+   [
+    23,
+    "single_closed"
+   ],
+   [
+    24,
+    "single_closed"
+   ]
+  ]
+ },
+ "R_LA": {
+  "bundle": "LA",
+  "eps": 0.0,
+  "redistribution_rule": "legacy_hybrid",
+  "redistribution_schedule": "adaptive_cv_trigger",
+  "redistribute_trigger_cv": 0.05,
+  "dead_point_rule": "legacy_lagged",
+  "n_steps_requested": 25,
+  "n_steps_completed": 25,
+  "stop_reason": null,
+  "timeline_errors": [],
+  "regular_redist_invocations": 25,
+  "post_removal_redist_events": 1,
+  "events": [
+   {
+    "step": 10,
+    "n_removed": 64,
+    "survivors_inner": 0,
+    "deleted_ids": [
+     128,
+     129,
+     130,
+     131,
+     132,
+     133,
+     134,
+     135,
+     136,
+     137,
+     138,
+     139,
+     140,
+     141,
+     142,
+     143,
+     144,
+     145,
+     146,
+     147,
+     148,
+     149,
+     150,
+     151,
+     152,
+     153,
+     154,
+     155,
+     156,
+     157,
+     158,
+     159,
+     160,
+     161,
+     162,
+     163,
+     164,
+     165,
+     166,
+     167,
+     168,
+     169,
+     170,
+     171,
+     172,
+     173,
+     174,
+     175,
+     176,
+     177,
+     178,
+     179,
+     180,
+     181,
+     182,
+     183,
+     184,
+     185,
+     186,
+     187,
+     188,
+     189,
+     190,
+     191
+    ],
+    "R_in_pre": 0.1375727840669474,
+    "margin_min_removed": -0.0007246541397112338,
+    "margin_min_kept": 2.3212296972950504,
+    "state": "single_closed",
+    "area_jump_deletion": 0.05936316647302409,
+    "area_jump_post_removal_redist": 2.4503276627285686e-05
+   }
+  ],
+  "first_event": 10,
+  "extinction_certificate": {
+   "loop_index": 1,
+   "n_removed": 64,
+   "hole_area_pre": -0.05936316647302393,
+   "area_jump": 0.05936316647302409
+  },
+  "requires_reconstruction": false,
+  "pending_topology_events": [],
+  "support_states_tail": [
+   [
+    22,
+    "single_closed"
+   ],
+   [
+    23,
+    "single_closed"
+   ],
+   [
+    24,
+    "single_closed"
+   ]
+  ]
+ },
+ "R_LF": {
+  "bundle": "LF",
+  "eps": 0.0,
+  "redistribution_rule": "legacy_hybrid",
+  "redistribution_schedule": "fixed_physical_interval",
+  "redistribute_physical_interval": 0.0001,
+  "dead_point_rule": "legacy_lagged",
+  "n_steps_requested": 25,
+  "n_steps_completed": 25,
+  "stop_reason": null,
+  "timeline_errors": [],
+  "regular_redist_invocations": 5,
+  "post_removal_redist_events": 1,
+  "events": [
+   {
+    "step": 10,
+    "n_removed": 64,
+    "survivors_inner": 0,
+    "deleted_ids": [
+     128,
+     129,
+     130,
+     131,
+     132,
+     133,
+     134,
+     135,
+     136,
+     137,
+     138,
+     139,
+     140,
+     141,
+     142,
+     143,
+     144,
+     145,
+     146,
+     147,
+     148,
+     149,
+     150,
+     151,
+     152,
+     153,
+     154,
+     155,
+     156,
+     157,
+     158,
+     159,
+     160,
+     161,
+     162,
+     163,
+     164,
+     165,
+     166,
+     167,
+     168,
+     169,
+     170,
+     171,
+     172,
+     173,
+     174,
+     175,
+     176,
+     177,
+     178,
+     179,
+     180,
+     181,
+     182,
+     183,
+     184,
+     185,
+     186,
+     187,
+     188,
+     189,
+     190,
+     191
+    ],
+    "R_in_pre": 0.13757269650760665,
+    "margin_min_removed": -0.0006265197633735786,
+    "margin_min_kept": 2.32278542665328,
+    "state": "single_closed",
+    "area_jump_deletion": 0.059363090908690186,
+    "area_jump_post_removal_redist": 7.171000492078861e-06
+   }
+  ],
+  "first_event": 10,
+  "extinction_certificate": {
+   "loop_index": 1,
+   "n_removed": 64,
+   "hole_area_pre": -0.05936309090869032,
+   "area_jump": 0.059363090908690186
+  },
+  "requires_reconstruction": false,
+  "pending_topology_events": [],
+  "support_states_tail": [
+   [
+    22,
+    "single_closed"
+   ],
+   [
+    23,
+    "single_closed"
+   ],
+   [
+    24,
+    "single_closed"
+   ]
+  ]
+ },
+ "R_RE": {
+  "bundle": "RE",
+  "eps": 0.0,
+  "redistribution_rule": "substep_refreshed",
+  "redistribution_schedule": "every_step",
+  "dead_point_rule": "refreshed",
+  "n_steps_requested": 25,
+  "n_steps_completed": 25,
+  "stop_reason": null,
+  "timeline_errors": [],
+  "regular_redist_invocations": 25,
+  "post_removal_redist_events": 1,
+  "events": [
+   {
+    "step": 9,
+    "n_removed": 64,
+    "survivors_inner": 0,
+    "deleted_ids": [
+     128,
+     129,
+     130,
+     131,
+     132,
+     133,
+     134,
+     135,
+     136,
+     137,
+     138,
+     139,
+     140,
+     141,
+     142,
+     143,
+     144,
+     145,
+     146,
+     147,
+     148,
+     149,
+     150,
+     151,
+     152,
+     153,
+     154,
+     155,
+     156,
+     157,
+     158,
+     159,
+     160,
+     161,
+     162,
+     163,
+     164,
+     165,
+     166,
+     167,
+     168,
+     169,
+     170,
+     171,
+     172,
+     173,
+     174,
+     175,
+     176,
+     177,
+     178,
+     179,
+     180,
+     181,
+     182,
+     183,
+     184,
+     185,
+     186,
+     187,
+     188,
+     189,
+     190,
+     191
+    ],
+    "R_in_pre": 0.13827285039839599,
+    "margin_min_removed": -0.0009255882455784237,
+    "margin_min_kept": 2.323263453610079,
+    "state": "single_closed",
+    "area_jump_deletion": 0.05996886610907337,
+    "area_jump_post_removal_redist": 9.073962644245981e-05
+   }
+  ],
+  "first_event": 9,
+  "extinction_certificate": {
+   "loop_index": 1,
+   "n_removed": 64,
+   "hole_area_pre": -0.0599688661090732,
+   "area_jump": 0.05996886610907337
+  },
+  "requires_reconstruction": false,
+  "pending_topology_events": [],
+  "support_states_tail": [
+   [
+    22,
+    "single_closed"
+   ],
+   [
+    23,
+    "single_closed"
+   ],
+   [
+    24,
+    "single_closed"
+   ]
+  ]
+ },
+ "P_LE": {
+  "bundle": "LE",
+  "eps": 0.03,
+  "redistribution_rule": "legacy_hybrid",
+  "redistribution_schedule": "every_step",
+  "dead_point_rule": "legacy_lagged",
+  "n_steps_requested": 14,
+  "n_steps_completed": 14,
+  "stop_reason": null,
+  "timeline_errors": [],
+  "regular_redist_invocations": 14,
+  "post_removal_redist_events": 1,
+  "events": [
+   {
+    "step": 9,
+    "n_removed": 12,
+    "survivors_inner": 52,
+    "deleted_ids": [
+     128,
+     129,
+     130,
+     157,
+     158,
+     159,
+     160,
+     161,
+     162,
+     189,
+     190,
+     191
+    ],
+    "R_in_pre": 0.13834248185021242,
+    "margin_min_removed": -0.00036853728213304127,
+    "margin_min_kept": 0.0006091031429593663,
+    "state": "open_after_deletion",
+    "area_jump_deletion": null,
+    "area_jump_post_removal_redist": null
+   }
+  ],
+  "first_event": 9,
+  "extinction_certificate": null,
+  "requires_reconstruction": true,
+  "pending_topology_events": [],
+  "support_states_tail": [
+   [
+    11,
+    "invalid_crossing"
+   ],
+   [
+    12,
+    "invalid_crossing"
+   ],
+   [
+    13,
+    "invalid_crossing"
+   ]
+  ]
+ },
+ "P_LA": {
+  "bundle": "LA",
+  "eps": 0.03,
+  "redistribution_rule": "legacy_hybrid",
+  "redistribution_schedule": "adaptive_cv_trigger",
+  "redistribute_trigger_cv": 0.05,
+  "dead_point_rule": "legacy_lagged",
+  "n_steps_requested": 14,
+  "n_steps_completed": 14,
+  "stop_reason": null,
+  "timeline_errors": [],
+  "regular_redist_invocations": 14,
+  "post_removal_redist_events": 1,
+  "events": [
+   {
+    "step": 9,
+    "n_removed": 12,
+    "survivors_inner": 52,
+    "deleted_ids": [
+     128,
+     129,
+     130,
+     157,
+     158,
+     159,
+     160,
+     161,
+     162,
+     189,
+     190,
+     191
+    ],
+    "R_in_pre": 0.13834248185021242,
+    "margin_min_removed": -0.00036853728213304127,
+    "margin_min_kept": 0.0006091031429593663,
+    "state": "open_after_deletion",
+    "area_jump_deletion": null,
+    "area_jump_post_removal_redist": null
+   }
+  ],
+  "first_event": 9,
+  "extinction_certificate": null,
+  "requires_reconstruction": true,
+  "pending_topology_events": [],
+  "support_states_tail": [
+   [
+    11,
+    "invalid_crossing"
+   ],
+   [
+    12,
+    "invalid_crossing"
+   ],
+   [
+    13,
+    "invalid_crossing"
+   ]
+  ]
+ },
+ "P_LF": {
+  "bundle": "LF",
+  "eps": 0.03,
+  "redistribution_rule": "legacy_hybrid",
+  "redistribution_schedule": "fixed_physical_interval",
+  "redistribute_physical_interval": 0.0001,
+  "dead_point_rule": "legacy_lagged",
+  "n_steps_requested": 14,
+  "n_steps_completed": 14,
+  "stop_reason": null,
+  "timeline_errors": [],
+  "regular_redist_invocations": 2,
+  "post_removal_redist_events": 1,
+  "events": [
+   {
+    "step": 9,
+    "n_removed": 20,
+    "survivors_inner": 44,
+    "deleted_ids": [
+     128,
+     129,
+     130,
+     131,
+     132,
+     155,
+     156,
+     157,
+     158,
+     159,
+     160,
+     161,
+     162,
+     163,
+     164,
+     187,
+     188,
+     189,
+     190,
+     191
+    ],
+    "R_in_pre": 0.13832843044233156,
+    "margin_min_removed": -0.00040675190711358944,
+    "margin_min_kept": 0.0018980899116136651,
+    "state": "open_after_deletion",
+    "area_jump_deletion": null,
+    "area_jump_post_removal_redist": null
+   }
+  ],
+  "first_event": 9,
+  "extinction_certificate": null,
+  "requires_reconstruction": true,
+  "pending_topology_events": [],
+  "support_states_tail": [
+   [
+    11,
+    "open_after_deletion"
+   ],
+   [
+    12,
+    "open_after_deletion"
+   ],
+   [
+    13,
+    "open_after_deletion"
+   ]
+  ]
+ },
+ "P_RE": {
+  "bundle": "RE",
+  "eps": 0.03,
+  "redistribution_rule": "substep_refreshed",
+  "redistribution_schedule": "every_step",
+  "dead_point_rule": "refreshed",
+  "n_steps_requested": 14,
+  "n_steps_completed": 14,
+  "stop_reason": null,
+  "timeline_errors": [],
+  "regular_redist_invocations": 14,
+  "post_removal_redist_events": 1,
+  "events": [
+   {
+    "step": 9,
+    "n_removed": 8,
+    "survivors_inner": 56,
+    "deleted_ids": [
+     128,
+     129,
+     158,
+     159,
+     160,
+     161,
+     190,
+     191
+    ],
+    "R_in_pre": 0.139428540475932,
+    "margin_min_removed": -0.0015808473374286924,
+    "margin_min_kept": 0.0008221577361666732,
+    "state": "open_after_deletion",
+    "area_jump_deletion": null,
+    "area_jump_post_removal_redist": null
+   }
+  ],
+  "first_event": 9,
+  "extinction_certificate": null,
+  "requires_reconstruction": true,
+  "pending_topology_events": [],
+  "support_states_tail": [
+   [
+    11,
+    "separated_closed"
+   ],
+   [
+    12,
+    "separated_closed"
+   ],
+   [
+    13,
+    "separated_closed"
+   ]
+  ]
+ },
+ "P_maskdiff_LE_LA": [],
+ "P_maskdiff_LE_LF": [
+  131,
+  132,
+  155,
+  156,
+  163,
+  164,
+  187,
+  188
+ ],
+ "P_maskdiff_LE_RE": [
+  130,
+  157,
+  162,
+  189
+ ]
+}

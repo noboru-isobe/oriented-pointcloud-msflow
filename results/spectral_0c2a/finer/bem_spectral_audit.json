@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "levels": [
+      0.0075
+    ],
+    "epsilon_scale": 0.1,
+    "n_endpoints": 3,
+    "trace_side": "interior",
+    "dtype": "torch.float64"
+  },
+  "checks": {
+    "Ba1_dim": true,
+    "Ba2_fixed_ratio_diagnostic": true,
+    "Ba2_asymptotic_trend": true,
+    "Ba3_angle": true,
+    "Ba4_res": true,
+    "Ba5_noncircular_trend": true,
+    "passed_0C2a": true
+  },
+  "rows": [
+    {
+      "geometry": "flower",
+      "tier": "primary",
+      "spacing": 0.0075,
+      "M": 1,
+      "C": 1,
+      "n_endpoints": 2859,
+      "epsilon": 0.0007497974951664773,
+      "sigma_low": [
+        0.001111137077335796,
+        0.18642784939505536,
+        0.18642785045820523,
+        0.20188980364786813
+      ],
+      "sigma_C": 0.001111137077335796,
+      "sigma_Cp1": 0.18642784939505536,
+      "gap": 0.005960145337412592,
+      "operator_norm": 0.8730012866226087,
+      "res_R_abs": 0.02222635030481402,
+      "res_L_abs": 5.554766603703912e-05,
+      "res_R_rel_weighted": 0.00127277828150115,
+      "res_L_rel_weighted": 0.0012727782815011494,
+      "principal_angles_deg": [
+        0.5305377018714805
+      ],
+      "theta_max_deg": 0.5305377018714805,
+      "detected_C": 1,
+      "seconds": 11.36989164352417
+    },
+    {
+      "geometry": "disk_ellipse_flower",
+      "tier": "primary",
+      "spacing": 0.0075,
+      "M": 3,
+      "C": 3,
+      "n_endpoints": 5754,
+      "epsilon": 0.0007502283323357489,
+      "sigma_low": [
+        0.0004150747596201081,
+        0.0005747137120892745,
+        0.0015155200651726381,
+        0.1866947337388838,
+        0.18691481102383775,
+        0.20167229308910312
+      ],
+      "sigma_C": 0.0015155200651726381,
+      "sigma_Cp1": 0.1866947337388838,
+      "gap": 0.00811763692966447,
+      "operator_norm": 0.8948596817316323,
+      "res_R_abs": 0.030313977715945288,
+      "res_L_abs": 7.57708207032308e-05,
+      "res_R_rel_weighted": 0.001693584028995393,
+      "res_L_rel_weighted": 0.0016935840289954043,
+      "principal_angles_deg": [
+        0.11337928657222242,
+        0.1686164032859596,
+        0.8417441794799216
+      ],
+      "theta_max_deg": 0.8417441794799216,
+      "detected_C": 3,
+      "seconds": 93.04221725463867
+    }
+  ]
+}

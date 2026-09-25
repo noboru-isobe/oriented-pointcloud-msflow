@@ -1,0 +1,42 @@
+[
+  {
+    "name": "annulus_run_a_n256_dt5e-06.json",
+    "n": 256,
+    "dt": 5e-06,
+    "t": 0.008,
+    "t_over_Tstar": 0.267881144372963,
+    "rel_error_out": 2.7686655841285945e-05,
+    "rel_error_in": 8.630463296088503e-05,
+    "area_drift": 2.996856339800226e-07
+  },
+  {
+    "name": "annulus_run_a_n256_dt1e-05.json",
+    "n": 256,
+    "dt": 1e-05,
+    "t": 0.008,
+    "t_over_Tstar": 0.267881144372963,
+    "rel_error_out": 2.7505990047975936e-05,
+    "rel_error_in": 9.248702459973826e-05,
+    "area_drift": 3.753200830179801e-06
+  },
+  {
+    "name": "annulus_run_a_n128_dt1e-05.json",
+    "n": 128,
+    "dt": 1e-05,
+    "t": 0.008,
+    "t_over_Tstar": 0.267881144372963,
+    "rel_error_out": 8.860887666770992e-05,
+    "rel_error_in": 0.0007765042961237306,
+    "area_drift": 4.78221416914168e-05
+  },
+  {
+    "name": "annulus_run_a_n64_dt1e-05.json",
+    "n": 64,
+    "dt": 1e-05,
+    "t": 0.008,
+    "t_over_Tstar": 0.267881144372963,
+    "rel_error_out": 0.0005868291900787603,
+    "rel_error_in": 0.004491948087769648,
+    "area_drift": 0.00027454485920030573
+  }
+]

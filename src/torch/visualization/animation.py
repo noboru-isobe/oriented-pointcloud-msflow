@@ -676,7 +676,7 @@ class CircleAnimator(VarifoldAnimator):
     def __init__(self, radius: float = 1.0, n_points: int = 32, **kwargs):
         from ..shapes import generate_oriented_circle
 
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        device = 'cpu'  # GPU disabled by policy (audit reproducibility)
 
         varifold = generate_oriented_circle(
             n_points=n_points, radius=radius, device=device

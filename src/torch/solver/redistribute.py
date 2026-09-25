@@ -33,6 +33,7 @@ def _compute_density_log_gradient(
     positions: torch.Tensor,
     delta: float,
     kernel: str,
+    loop_labels: torch.Tensor | None = None,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     """Compute ∇log θ_i for tangential velocity.
 
@@ -62,6 +63,15 @@ def _compute_density_log_gradient(
 
     rho_prime = pw.rho_prime  # (N, N)
     eta_vals = eta_fn(pw.s)   # (N, N)
+    if loop_labels is not None:
+        # 0L-R: same-loop density (the 0K sibling for redistribution
+        # -- the operator equalizes each loop's OWN sampling density,
+        # never the mixed density of an approaching opposite sheet).
+        # None keeps the historical path bitwise.
+        same = (loop_labels.unsqueeze(1)
+                == loop_labels.unsqueeze(0)).to(eta_vals.dtype)
+        rho_prime = rho_prime * same
+        eta_vals = eta_vals * same
 
     # ∇θ_i = -(1/(N C_η δ²)) Σ_j ρ'(s_ij) · (x_j - x_i) / |x_j - x_i|
     grad_theta = -(rho_prime.unsqueeze(-1) * pw.unit_diff).sum(dim=1) / (
@@ -91,6 +101,7 @@ def redistribute_points(
     mass_tau: float = 0.0,
     delta_redist: float | None = None,
     coherence: torch.Tensor | None = None,
+    trace: bool = False,
 ) -> tuple[torch.Tensor, torch.Tensor, dict]:
     """Redistribute points to equalize KDE densities θ_i.
 
@@ -126,6 +137,7 @@ def redistribute_points(
 
     # Diagnostics
     cv_history = []
+    trace_rows = [] if trace else None
 
     actual_iters = 0
     for it in range(n_iters):
@@ -156,6 +168,14 @@ def redistribute_points(
         if disp_max.item() > max_disp:
             update = update * (max_disp / disp_max)
 
+        if trace_rows is not None:
+            # D2 subiteration audit: which quantities each substep used
+            trace_rows.append(dict(
+                iteration=it,
+                update_norm=update.norm(dim=1).max().item(),
+                cv=cv,
+                coherence_is_fixed=coherence is not None,
+            ))
         pos = pos + update
         actual_iters = it + 1
 
@@ -166,6 +186,7 @@ def redistribute_points(
 
     info = {
         'cv_history': cv_history,
+        'trace': trace_rows,
         'n_iters': actual_iters,
         'converged': actual_iters < n_iters,
     }

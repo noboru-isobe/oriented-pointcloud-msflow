@@ -8,10 +8,21 @@ from src.torch.oriented_varifold import OrientedPointCloudVarifold
 from .curves import ParametricCurve, circle, ellipse, flower, star
 
 
+def _require_device(device):
+    """Explicit-device policy: silent device defaults put audit
+    geometries on the GPU unnoticed; every public tensor-allocating
+    entry point must receive the device explicitly."""
+    if device is None:
+        raise ValueError(
+            "pass device explicitly ('cpu' or 'cuda'); silent device "
+            "defaults are forbidden by policy")
+    return device
+
+
 def sample_curve(
     curve: ParametricCurve,
     n_points: int,
-    device: str = "cuda",
+    device: str | None = None,
     dtype: torch.dtype = torch.float32,
     initial_sampling: str = "parameter",
 ) -> OrientedPointCloudVarifold:
@@ -31,6 +42,7 @@ def sample_curve(
     Returns:
         OrientedPointCloudVarifold with sampled points and angles
     """
+    device = _require_device(device)
     if initial_sampling == "mass_uniform":
         if curve.speed_fn is None:
             raise ValueError(f"Curve '{curve.name}' does not support mass_uniform sampling (no speed_fn)")
@@ -55,7 +67,7 @@ def generate_oriented_circle(
     n_points: int,
     radius: float = 1.0,
     center: Tuple[float, float] = (0.0, 0.0),
-    device: str = "cuda",
+    device: str | None = None,
     dtype: torch.dtype = torch.float32,
 ) -> OrientedPointCloudVarifold:
     """Generate oriented point cloud for a circle."""
@@ -67,7 +79,7 @@ def generate_oriented_ellipse(
     a: float = 1.0,
     b: float = 0.5,
     center: Tuple[float, float] = (0.0, 0.0),
-    device: str = "cuda",
+    device: str | None = None,
     dtype: torch.dtype = torch.float32,
     initial_sampling: str = "parameter",
 ) -> OrientedPointCloudVarifold:
@@ -81,7 +93,7 @@ def generate_oriented_flower(
     inner_radius: float = 0.5,
     outer_radius: float = 1.0,
     center: Tuple[float, float] = (0.0, 0.0),
-    device: str = "cuda",
+    device: str | None = None,
     dtype: torch.dtype = torch.float32,
     initial_sampling: str = "parameter",
 ) -> OrientedPointCloudVarifold:
@@ -101,7 +113,7 @@ def generate_oriented_star(
     inner_radius: float = 0.4,
     outer_radius: float = 1.0,
     center: Tuple[float, float] = (0.0, 0.0),
-    device: str = "cuda",
+    device: str | None = None,
     dtype: torch.dtype = torch.float32,
     initial_sampling: str = "parameter",
 ) -> OrientedPointCloudVarifold:
@@ -123,7 +135,7 @@ def generate_oriented_two_ellipses(
     a2: float = 0.4,
     b2: float = 1.0,
     center2: Tuple[float, float] = (0.6, 0.0),
-    device: str = "cuda",
+    device: str | None = None,
     dtype: torch.dtype = torch.float32,
 ) -> OrientedPointCloudVarifold:
     """
@@ -153,13 +165,103 @@ def generate_oriented_two_ellipses(
     return OrientedPointCloudVarifold(positions=positions, angles=angles)
 
 
+def annulus_point_counts(
+    n_outer: int,
+    R_outer: float = 1.0,
+    R_inner: float = 0.5,
+) -> Tuple[int, int]:
+    """Arc-length-proportional split of an annulus into (n_outer, n_inner).
+
+    n_inner / n_outer = R_inner / R_outer, so both rings get the same point
+    spacing h = 2*pi*R / n. Equal spacing keeps the global median nearest
+    neighbour distance (which sets sigma and the BEM regularisation) from
+    being pulled around by whichever ring happens to be denser.
+
+    Returns:
+        (n_outer, n_inner), with n_inner clamped to at least 3.
+    """
+    n_inner = max(3, int(round(n_outer * R_inner / R_outer)))
+    return n_outer, n_inner
+
+
+def generate_oriented_annulus(
+    n_outer: int,
+    R_outer: float = 1.0,
+    R_inner: float = 0.5,
+    center: Tuple[float, float] = (0.0, 0.0),
+    device: str | None = None,
+    dtype: torch.dtype = torch.float32,
+    n_inner: Optional[int] = None,
+) -> OrientedPointCloudVarifold:
+    """Generate oriented point cloud for an annulus {R_inner < |x| < R_outer}.
+
+    The inner ring carries angles t + pi, i.e. normals pointing *into* the
+    hole. That is the outward normal of the material, so the divergence
+    theorem area 0.5 * sum_i (x_i . n_i) m_i picks up -pi*R_inner^2 from the
+    inner ring and +pi*R_outer^2 from the outer one, giving the correct
+    pi*(R_outer^2 - R_inner^2).
+
+    Point ordering: indices [0, n_outer) are the outer ring, [n_outer, N) the
+    inner ring. Callers that need to follow the two boundary components
+    through dead-point removal should build particle labels from this split.
+
+    Args:
+        n_outer: points on the outer ring
+        R_outer, R_inner: radii, R_inner < R_outer
+        center: annulus centre
+        device: torch device
+        dtype: torch dtype
+        n_inner: override the arc-length-proportional inner count
+
+    Returns:
+        OrientedPointCloudVarifold with n_outer + n_inner points
+    """
+    device = _require_device(device)
+    if not 0.0 < R_inner < R_outer:
+        raise ValueError(
+            f"need 0 < R_inner < R_outer, got R_inner={R_inner}, R_outer={R_outer}"
+        )
+    if n_inner is None:
+        n_outer, n_inner = annulus_point_counts(n_outer, R_outer, R_inner)
+
+    v_out = generate_oriented_circle(n_outer, R_outer, center, device, dtype)
+    v_in = generate_oriented_circle(n_inner, R_inner, center, device, dtype)
+
+    positions = torch.cat([v_out.positions, v_in.positions], dim=0)
+    angles = torch.cat([v_out.angles, v_in.angles + math.pi], dim=0)
+
+    return OrientedPointCloudVarifold(positions=positions, angles=angles)
+
+
+def annulus_exact_masses(
+    n_outer: int,
+    n_inner: int,
+    R_outer: float = 1.0,
+    R_inner: float = 0.5,
+    device: str | None = None,
+    dtype: torch.dtype = torch.float32,
+) -> torch.Tensor:
+    """Exact arc-length quadrature weights for `generate_oriented_annulus`.
+
+    m_i = 2*pi*R / n on each ring. Static tests use these to separate
+    generator/BEM error from the KDE carrier estimator's own error.
+    """
+    device = _require_device(device)
+    return torch.cat([
+        torch.full((n_outer,), 2 * math.pi * R_outer / n_outer,
+                   device=device, dtype=dtype),
+        torch.full((n_inner,), 2 * math.pi * R_inner / n_inner,
+                   device=device, dtype=dtype),
+    ])
+
+
 def generate_oriented_two_circles(
     n_per_circle: int,
     radius1: float = 0.8,
     center1: Tuple[float, float] = (-1.0, 0.0),
     radius2: float = 0.8,
     center2: Tuple[float, float] = (1.0, 0.0),
-    device: str = "cuda",
+    device: str | None = None,
     dtype: torch.dtype = torch.float32,
 ) -> OrientedPointCloudVarifold:
     """
@@ -175,6 +277,7 @@ def generate_oriented_two_circles(
     Returns:
         OrientedPointCloudVarifold with 2*n_per_circle points
     """
+    device = _require_device(device)
     v1 = generate_oriented_circle(n_per_circle, radius1, center1, device, dtype)
     v2 = generate_oriented_circle(n_per_circle, radius2, center2, device, dtype)
 
@@ -190,7 +293,7 @@ def generate_oriented_rectangle(
     height: float = 1.0,
     center: Tuple[float, float] = (0.0, 0.0),
     corner_radius: float = 0.1,
-    device: str = "cuda",
+    device: str | None = None,
     dtype: torch.dtype = torch.float32,
 ) -> OrientedPointCloudVarifold:
     """
@@ -212,6 +315,7 @@ def generate_oriented_rectangle(
     Returns:
         OrientedPointCloudVarifold
     """
+    device = _require_device(device)
     cx, cy = center
     r = corner_radius
     hw = width / 2 - r  # half-width of straight part
@@ -324,7 +428,7 @@ def generate_oriented_two_rectangles(
     height2: float = 2.0,
     center2: Tuple[float, float] = (0.6, 0.0),
     corner_radius: float = 0.1,
-    device: str = "cuda",
+    device: str | None = None,
     dtype: torch.dtype = torch.float32,
 ) -> OrientedPointCloudVarifold:
     """
@@ -343,6 +447,7 @@ def generate_oriented_two_rectangles(
     Returns:
         OrientedPointCloudVarifold with ~2*n_per_rect points
     """
+    device = _require_device(device)
     v1 = generate_oriented_rectangle(n_per_rect, width1, height1, center1, corner_radius, device, dtype)
     v2 = generate_oriented_rectangle(n_per_rect, width2, height2, center2, corner_radius, device, dtype)
 

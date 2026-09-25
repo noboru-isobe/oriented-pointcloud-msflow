@@ -1,0 +1,194 @@
+L0-0 pins: {"n_el": 188, "N": 376, "L_ell": 4.602622519132968, "spacing": 0.024482034676239193, "h_ref": 0.02454369260617026, "mass_median": 0.02446380179970815, "g_min": 0.09999999999999998, "A": [1.2563233614489229, 1.2563233614489229], "A_target": 1.2566370614359172, "bar": [[-0.4500000000041661, 4.2516941633175886e-17], [0.44999999999583384, 2.6695346302833033e-17]], "bar_target": [[-0.45, -0.0], [0.45, 0.0]], "spacing_max_over_min": 1.000979531394273}
+L0: one-phase interior MS, N=376 (2 x 188 arc-length), H=768, dt=1e-05, rot=0.0 deg, q_mode=self_renormalized, R_eq check 0.894427
+step    0: g_min 0.1000 (/h 4.09) dA 4.78e-07 dbar 1.21e-12 r_l [1.0000 1.0000] rel equal (4.8s/step)
+step   25: g_min 0.0996 (/h 4.08) dA 9.41e-06 dbar 4.59e-11 r_l [1.0000 1.0000] rel equal (1.1s/step)
+step   50: g_min 0.0992 (/h 4.07) dA 1.59e-05 dbar 1.58e-10 r_l [1.0000 1.0000] rel equal (0.9s/step)
+step   75: g_min 0.0988 (/h 4.06) dA 2.11e-05 dbar 2.72e-10 r_l [1.0000 1.0000] rel equal (0.9s/step)
+step  100: g_min 0.0984 (/h 4.05) dA 2.57e-05 dbar 3.19e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  125: g_min 0.0980 (/h 4.04) dA 2.97e-05 dbar 4.40e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  150: g_min 0.0976 (/h 4.03) dA 3.34e-05 dbar 3.93e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  175: g_min 0.0972 (/h 4.02) dA 3.67e-05 dbar 4.08e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  200: g_min 0.0968 (/h 4.01) dA 3.96e-05 dbar 5.59e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  225: g_min 0.0964 (/h 4.00) dA 4.23e-05 dbar 5.94e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  250: g_min 0.0960 (/h 3.99) dA 4.48e-05 dbar 5.92e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  275: g_min 0.0957 (/h 3.97) dA 4.72e-05 dbar 5.58e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  300: g_min 0.0953 (/h 3.96) dA 4.93e-05 dbar 6.43e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  325: g_min 0.0949 (/h 3.95) dA 5.14e-05 dbar 6.33e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  350: g_min 0.0945 (/h 3.94) dA 5.32e-05 dbar 6.70e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  375: g_min 0.0941 (/h 3.93) dA 5.50e-05 dbar 8.53e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  400: g_min 0.0936 (/h 3.91) dA 5.66e-05 dbar 9.21e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  425: g_min 0.0932 (/h 3.90) dA 5.82e-05 dbar 9.19e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  450: g_min 0.0928 (/h 3.88) dA 5.95e-05 dbar 8.88e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  475: g_min 0.0923 (/h 3.87) dA 6.09e-05 dbar 9.71e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  500: g_min 0.0918 (/h 3.85) dA 6.22e-05 dbar 1.05e-09 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  525: g_min 0.0913 (/h 3.83) dA 6.33e-05 dbar 8.89e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  550: g_min 0.0907 (/h 3.81) dA 6.45e-05 dbar 9.29e-10 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  575: g_min 0.0901 (/h 3.79) dA 6.54e-05 dbar 1.11e-09 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  600: g_min 0.0895 (/h 3.77) dA 6.64e-05 dbar 1.19e-09 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  625: g_min 0.0889 (/h 3.75) dA 6.73e-05 dbar 1.08e-09 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  650: g_min 0.0883 (/h 3.72) dA 6.82e-05 dbar 1.02e-09 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  675: g_min 0.0876 (/h 3.70) dA 6.90e-05 dbar 1.25e-09 r_l [1.0000 1.0000] rel equal (0.8s/step)
+step  700: g_min 0.0869 (/h 3.67) dA 6.97e-05 dbar 1.36e-09 r_l [0.9999 0.9999] rel equal (0.8s/step)
+step  725: g_min 0.0861 (/h 3.64) dA 7.04e-05 dbar 1.46e-09 r_l [0.9999 0.9999] rel equal (0.8s/step)
+step  750: g_min 0.0853 (/h 3.61) dA 7.10e-05 dbar 1.45e-09 r_l [0.9999 0.9999] rel equal (0.8s/step)
+step  775: g_min 0.0845 (/h 3.58) dA 7.16e-05 dbar 1.42e-09 r_l [0.9999 0.9999] rel equal (0.8s/step)
+step  800: g_min 0.0837 (/h 3.55) dA 7.21e-05 dbar 1.53e-09 r_l [0.9998 0.9998] rel equal (0.8s/step)
+step  825: g_min 0.0828 (/h 3.51) dA 7.26e-05 dbar 1.60e-09 r_l [0.9998 0.9998] rel equal (0.8s/step)
+step  850: g_min 0.0819 (/h 3.48) dA 7.30e-05 dbar 1.85e-09 r_l [0.9997 0.9997] rel equal (0.8s/step)
+step  875: g_min 0.0810 (/h 3.44) dA 7.35e-05 dbar 1.64e-09 r_l [0.9996 0.9996] rel equal (0.8s/step)
+step  900: g_min 0.0801 (/h 3.41) dA 7.38e-05 dbar 1.63e-09 r_l [0.9995 0.9995] rel equal (0.8s/step)
+step  925: g_min 0.0791 (/h 3.37) dA 7.42e-05 dbar 1.35e-09 r_l [0.9994 0.9994] rel equal (0.8s/step)
+step  950: g_min 0.0781 (/h 3.33) dA 7.45e-05 dbar 1.71e-09 r_l [0.9992 0.9992] rel equal (0.8s/step)
+step  975: g_min 0.0771 (/h 3.29) dA 7.47e-05 dbar 2.05e-09 r_l [0.9990 0.9990] rel equal (0.8s/step)
+step 1000: g_min 0.0760 (/h 3.24) dA 7.50e-05 dbar 1.73e-09 r_l [0.9987 0.9987] rel equal (0.8s/step)
+step 1025: g_min 0.0749 (/h 3.20) dA 7.52e-05 dbar 1.65e-09 r_l [0.9984 0.9984] rel equal (0.8s/step)
+step 1050: g_min 0.0738 (/h 3.16) dA 7.54e-05 dbar 1.90e-09 r_l [0.9981 0.9981] rel equal (0.8s/step)
+step 1075: g_min 0.0727 (/h 3.11) dA 7.55e-05 dbar 1.47e-09 r_l [0.9977 0.9977] rel equal (0.8s/step)
+step 1100: g_min 0.0716 (/h 3.07) dA 7.56e-05 dbar 1.72e-09 r_l [0.9972 0.9972] rel equal (0.8s/step)
+step 1125: g_min 0.0704 (/h 3.02) dA 7.57e-05 dbar 1.83e-09 r_l [0.9966 0.9966] rel equal (0.8s/step)
+step 1150: g_min 0.0693 (/h 2.97) dA 7.57e-05 dbar 1.93e-09 r_l [0.9959 0.9959] rel equal (0.8s/step)
+step 1175: g_min 0.0681 (/h 2.92) dA 7.58e-05 dbar 1.54e-09 r_l [0.9951 0.9951] rel equal (0.8s/step)
+step 1200: g_min 0.0669 (/h 2.87) dA 7.57e-05 dbar 1.80e-09 r_l [0.9942 0.9942] rel equal (0.8s/step)
+step 1225: g_min 0.0656 (/h 2.82) dA 7.58e-05 dbar 2.12e-09 r_l [0.9932 0.9932] rel equal (0.8s/step)
+step 1250: g_min 0.0644 (/h 2.77) dA 7.57e-05 dbar 2.09e-09 r_l [0.9921 0.9921] rel equal (0.8s/step)
+step 1275: g_min 0.0631 (/h 2.72) dA 7.58e-05 dbar 2.14e-09 r_l [0.9908 0.9908] rel equal (0.8s/step)
+step 1300: g_min 0.0619 (/h 2.66) dA 7.56e-05 dbar 2.18e-09 r_l [0.9894 0.9894] rel equal (0.8s/step)
+step 1325: g_min 0.0606 (/h 2.61) dA 7.56e-05 dbar 2.18e-09 r_l [0.9878 0.9878] rel equal (0.8s/step)
+step 1350: g_min 0.0593 (/h 2.56) dA 7.55e-05 dbar 2.65e-09 r_l [0.9860 0.9860] rel equal (0.8s/step)
+step 1375: g_min 0.0580 (/h 2.50) dA 7.53e-05 dbar 2.71e-09 r_l [0.9841 0.9841] rel equal (0.8s/step)
+step 1400: g_min 0.0566 (/h 2.45) dA 7.53e-05 dbar 3.50e-09 r_l [0.9820 0.9820] rel equal (0.8s/step)
+step 1425: g_min 0.0553 (/h 2.39) dA 7.54e-05 dbar 5.01e-09 r_l [0.9797 0.9797] rel equal (0.8s/step)
+== L-A activation transaction at source step 1431 ==
+== EVENT t_act: WB -> CC ACTIVATED at step 1431 (dX_arms/h 3.59e-04) ==
+step 1450: g_min 0.0540 (/h 2.33) dA 7.54e-05 dbar 1.04e-08 r_l [0.9772 0.9772] rel equal (0.8s/step)
+step 1475: g_min 0.0527 (/h 2.28) dA 7.52e-05 dbar 1.79e-08 r_l [0.9746 0.9746] rel equal (0.9s/step)
+step 1500: g_min 0.0513 (/h 2.22) dA 7.50e-05 dbar 2.27e-08 r_l [0.9717 0.9717] rel equal (0.9s/step)
+step 1525: g_min 0.0500 (/h 2.17) dA 7.47e-05 dbar 3.15e-08 r_l [0.9686 0.9686] rel equal (0.9s/step)
+step 1550: g_min 0.0486 (/h 2.11) dA 7.44e-05 dbar 4.12e-08 r_l [0.9653 0.9653] rel equal (0.9s/step)
+step 1575: g_min 0.0473 (/h 2.05) dA 7.41e-05 dbar 5.18e-08 r_l [0.9619 0.9619] rel equal (0.9s/step)
+step 1600: g_min 0.0459 (/h 1.99) dA 7.38e-05 dbar 6.28e-08 r_l [0.9583 0.9583] rel equal (0.9s/step)
+step 1625: g_min 0.0445 (/h 1.94) dA 7.34e-05 dbar 7.40e-08 r_l [0.9545 0.9545] rel equal (0.9s/step)
+step 1650: g_min 0.0431 (/h 1.88) dA 7.30e-05 dbar 8.55e-08 r_l [0.9506 0.9506] rel equal (0.9s/step)
+step 1675: g_min 0.0418 (/h 1.82) dA 7.26e-05 dbar 9.82e-08 r_l [0.9465 0.9465] rel equal (0.9s/step)
+step 1700: g_min 0.0404 (/h 1.76) dA 7.22e-05 dbar 1.11e-07 r_l [0.9422 0.9422] rel equal (0.9s/step)
+step 1725: g_min 0.0390 (/h 1.70) dA 7.18e-05 dbar 1.24e-07 r_l [0.9379 0.9379] rel equal (0.9s/step)
+step 1750: g_min 0.0376 (/h 1.64) dA 7.13e-05 dbar 1.37e-07 r_l [0.9334 0.9334] rel equal (0.9s/step)
+step 1775: g_min 0.0362 (/h 1.58) dA 7.09e-05 dbar 1.51e-07 r_l [0.9289 0.9289] rel equal (0.9s/step)
+step 1800: g_min 0.0348 (/h 1.52) dA 7.04e-05 dbar 1.64e-07 r_l [0.9244 0.9244] rel equal (0.9s/step)
+step 1825: g_min 0.0335 (/h 1.46) dA 6.98e-05 dbar 1.75e-07 r_l [0.9198 0.9198] rel equal (0.9s/step)
+    W: n (7, 7) runs (1, 1) L_W/h 7.00 eta_loc 0.1270 eta_spill 0.0813
+step 1850: g_min 0.0321 (/h 1.40) dA 6.93e-05 dbar 1.87e-07 r_l [0.9151 0.9151] rel equal (0.9s/step)
+    W: n (11, 11) runs (1, 1) L_W/h 11.00 eta_loc 0.1308 eta_spill 0.0860
+step 1875: g_min 0.0307 (/h 1.34) dA 6.87e-05 dbar 1.98e-07 r_l [0.9103 0.9103] rel equal (0.9s/step)
+    W: n (13, 13) runs (1, 1) L_W/h 13.01 eta_loc 0.1340 eta_spill 0.0908
+step 1900: g_min 0.0294 (/h 1.29) dA 6.81e-05 dbar 2.09e-07 r_l [0.9055 0.9055] rel equal (0.9s/step)
+    W: n (15, 15) runs (1, 1) L_W/h 15.01 eta_loc 0.1374 eta_spill 0.0956
+step 1925: g_min 0.0280 (/h 1.23) dA 6.75e-05 dbar 2.19e-07 r_l [0.9007 0.9007] rel equal (0.9s/step)
+    W: n (17, 17) runs (1, 1) L_W/h 17.01 eta_loc 0.1410 eta_spill 0.1004
+step 1950: g_min 0.0267 (/h 1.17) dA 6.69e-05 dbar 2.28e-07 r_l [0.8959 0.8959] rel equal (0.9s/step)
+    W: n (19, 19) runs (1, 1) L_W/h 19.01 eta_loc 0.1448 eta_spill 0.1052
+step 1975: g_min 0.0253 (/h 1.11) dA 6.62e-05 dbar 2.37e-07 r_l [0.8911 0.8911] rel equal (0.9s/step)
+    W: n (21, 21) runs (1, 1) L_W/h 21.01 eta_loc 0.1487 eta_spill 0.1100
+step 2000: g_min 0.0240 (/h 1.05) dA 6.56e-05 dbar 2.41e-07 r_l [0.8865 0.8865] rel equal (0.9s/step)
+    W: n (21, 21) runs (1, 1) L_W/h 21.01 eta_loc 0.1502 eta_spill 0.1146
+step 2025: g_min 0.0227 (/h 1.00) dA 6.49e-05 dbar 2.39e-07 r_l [0.8820 0.8820] rel b_finer (0.9s/step)
+    W: n (23, 23) runs (1, 1) L_W/h 23.01 eta_loc 0.1543 eta_spill 0.1191
+== EVENT b_finer onset at step 2025 ==
+== EVENT t_quot: bulks 2 -> 1 COMMITTED at step 2025 (auto; all gates) ==
+== EVENT t_splice: loops 2 -> 1 at step 2029 (N 376 -> 304, corr residual (0.0, -7.05454219078439e-17, -5.298812242571143e-17)) ==
+step 2050 [1-loop]: dA -1.40e-04 isoper 0.71125 r/R_eq 0.97226
+step 2075 [1-loop]: dA -1.79e-04 isoper 0.73352 r/R_eq 0.97552
+step 2100 [1-loop]: dA -1.83e-04 isoper 0.75118 r/R_eq 0.97862
+step 2125 [1-loop]: dA -1.78e-04 isoper 0.76604 r/R_eq 0.98128
+step 2150 [1-loop]: dA -1.66e-04 isoper 0.77897 r/R_eq 0.98369
+step 2175 [1-loop]: dA -1.55e-04 isoper 0.79047 r/R_eq 0.98571
+step 2200 [1-loop]: dA -1.42e-04 isoper 0.80086 r/R_eq 0.98753
+step 2225 [1-loop]: dA -1.31e-04 isoper 0.81033 r/R_eq 0.98906
+step 2250 [1-loop]: dA -1.19e-04 isoper 0.81904 r/R_eq 0.99043
+step 2275 [1-loop]: dA -1.09e-04 isoper 0.82711 r/R_eq 0.99160
+step 2300 [1-loop]: dA -9.75e-05 isoper 0.83461 r/R_eq 0.99265
+step 2325 [1-loop]: dA -8.84e-05 isoper 0.84161 r/R_eq 0.99356
+step 2350 [1-loop]: dA -7.67e-05 isoper 0.84819 r/R_eq 0.99438
+step 2375 [1-loop]: dA -6.43e-05 isoper 0.85436 r/R_eq 0.99513
+step 2400 [1-loop]: dA -5.22e-05 isoper 0.86019 r/R_eq 0.99584
+step 2425 [1-loop]: dA -4.19e-05 isoper 0.86569 r/R_eq 0.99648
+step 2450 [1-loop]: dA -3.41e-05 isoper 0.87090 r/R_eq 0.99704
+step 2475 [1-loop]: dA -2.45e-05 isoper 0.87584 r/R_eq 0.99760
+step 2500 [1-loop]: dA -1.56e-05 isoper 0.88053 r/R_eq 0.99828
+step 2525 [1-loop]: dA +1.13e-05 isoper 0.88499 r/R_eq 0.99960
+step 2550 [1-loop]: dA +4.36e-05 isoper 0.88924 r/R_eq 1.00124
+step 2575 [1-loop]: dA +5.67e-05 isoper 0.89329 r/R_eq 1.00195
+step 2600 [1-loop]: dA +6.23e-05 isoper 0.89716 r/R_eq 1.00226
+step 2625 [1-loop]: dA +6.49e-05 isoper 0.90085 r/R_eq 1.00240
+step 2650 [1-loop]: dA +6.63e-05 isoper 0.90438 r/R_eq 1.00247
+step 2675 [1-loop]: dA +6.72e-05 isoper 0.90776 r/R_eq 1.00251
+step 2700 [1-loop]: dA +6.78e-05 isoper 0.91100 r/R_eq 1.00254
+step 2725 [1-loop]: dA +6.81e-05 isoper 0.91410 r/R_eq 1.00255
+step 2750 [1-loop]: dA +6.82e-05 isoper 0.91707 r/R_eq 1.00255
+step 2775 [1-loop]: dA +6.83e-05 isoper 0.91992 r/R_eq 1.00255
+step 2800 [1-loop]: dA +6.81e-05 isoper 0.92265 r/R_eq 1.00254
+step 2825 [1-loop]: dA +6.79e-05 isoper 0.92528 r/R_eq 1.00253
+step 2850 [1-loop]: dA +6.76e-05 isoper 0.92780 r/R_eq 1.00252
+step 2875 [1-loop]: dA +6.72e-05 isoper 0.93023 r/R_eq 1.00250
+step 2900 [1-loop]: dA +6.67e-05 isoper 0.93256 r/R_eq 1.00248
+step 2925 [1-loop]: dA +6.62e-05 isoper 0.93480 r/R_eq 1.00246
+step 2950 [1-loop]: dA +6.55e-05 isoper 0.93695 r/R_eq 1.00243
+step 2975 [1-loop]: dA +6.49e-05 isoper 0.93903 r/R_eq 1.00241
+step 3000 [1-loop]: dA +6.41e-05 isoper 0.94102 r/R_eq 1.00238
+step 3025 [1-loop]: dA +6.34e-05 isoper 0.94294 r/R_eq 1.00235
+step 3050 [1-loop]: dA +6.26e-05 isoper 0.94479 r/R_eq 1.00232
+step 3075 [1-loop]: dA +6.18e-05 isoper 0.94657 r/R_eq 1.00230
+step 3100 [1-loop]: dA +6.09e-05 isoper 0.94829 r/R_eq 1.00227
+step 3125 [1-loop]: dA +6.00e-05 isoper 0.94994 r/R_eq 1.00224
+step 3150 [1-loop]: dA +5.91e-05 isoper 0.95153 r/R_eq 1.00221
+step 3175 [1-loop]: dA +5.81e-05 isoper 0.95306 r/R_eq 1.00218
+step 3200 [1-loop]: dA +5.72e-05 isoper 0.95454 r/R_eq 1.00215
+step 3225 [1-loop]: dA +5.62e-05 isoper 0.95596 r/R_eq 1.00212
+step 3250 [1-loop]: dA +5.52e-05 isoper 0.95733 r/R_eq 1.00209
+step 3275 [1-loop]: dA +5.43e-05 isoper 0.95865 r/R_eq 1.00206
+step 3300 [1-loop]: dA +5.33e-05 isoper 0.95993 r/R_eq 1.00204
+step 3325 [1-loop]: dA +5.23e-05 isoper 0.96116 r/R_eq 1.00201
+step 3350 [1-loop]: dA +5.12e-05 isoper 0.96234 r/R_eq 1.00198
+step 3375 [1-loop]: dA +5.02e-05 isoper 0.96348 r/R_eq 1.00195
+step 3400 [1-loop]: dA +4.92e-05 isoper 0.96458 r/R_eq 1.00193
+step 3425 [1-loop]: dA +4.82e-05 isoper 0.96564 r/R_eq 1.00190
+step 3450 [1-loop]: dA +4.72e-05 isoper 0.96666 r/R_eq 1.00188
+step 3475 [1-loop]: dA +4.62e-05 isoper 0.96764 r/R_eq 1.00185
+step 3500 [1-loop]: dA +4.52e-05 isoper 0.96859 r/R_eq 1.00183
+step 3525 [1-loop]: dA +4.42e-05 isoper 0.96950 r/R_eq 1.00181
+step 3550 [1-loop]: dA +4.32e-05 isoper 0.97038 r/R_eq 1.00178
+step 3575 [1-loop]: dA +4.22e-05 isoper 0.97123 r/R_eq 1.00176
+step 3600 [1-loop]: dA +4.12e-05 isoper 0.97205 r/R_eq 1.00174
+step 3625 [1-loop]: dA +4.02e-05 isoper 0.97284 r/R_eq 1.00172
+step 3650 [1-loop]: dA +3.92e-05 isoper 0.97360 r/R_eq 1.00170
+step 3675 [1-loop]: dA +3.82e-05 isoper 0.97433 r/R_eq 1.00168
+step 3700 [1-loop]: dA +3.73e-05 isoper 0.97503 r/R_eq 1.00166
+step 3725 [1-loop]: dA +3.63e-05 isoper 0.97571 r/R_eq 1.00164
+step 3750 [1-loop]: dA +3.54e-05 isoper 0.97637 r/R_eq 1.00162
+step 3775 [1-loop]: dA +3.44e-05 isoper 0.97700 r/R_eq 1.00160
+step 3800 [1-loop]: dA +3.35e-05 isoper 0.97761 r/R_eq 1.00158
+step 3825 [1-loop]: dA +3.26e-05 isoper 0.97819 r/R_eq 1.00156
+step 3850 [1-loop]: dA +3.16e-05 isoper 0.97876 r/R_eq 1.00155
+step 3875 [1-loop]: dA +3.07e-05 isoper 0.97930 r/R_eq 1.00153
+step 3900 [1-loop]: dA +2.98e-05 isoper 0.97982 r/R_eq 1.00151
+step 3925 [1-loop]: dA +2.90e-05 isoper 0.98033 r/R_eq 1.00150
+step 3950 [1-loop]: dA +2.81e-05 isoper 0.98082 r/R_eq 1.00148
+step 3975 [1-loop]: dA +2.72e-05 isoper 0.98128 r/R_eq 1.00147
+step 4000 [1-loop]: dA +2.64e-05 isoper 0.98174 r/R_eq 1.00146
+step 4025 [1-loop]: dA +2.55e-05 isoper 0.98217 r/R_eq 1.00144
+step 4050 [1-loop]: dA +2.47e-05 isoper 0.98259 r/R_eq 1.00143
+step 4075 [1-loop]: dA +2.39e-05 isoper 0.98300 r/R_eq 1.00142
+step 4100 [1-loop]: dA +2.30e-05 isoper 0.98338 r/R_eq 1.00140
+step 4125 [1-loop]: dA +2.22e-05 isoper 0.98376 r/R_eq 1.00139
+step 4150 [1-loop]: dA +2.14e-05 isoper 0.98412 r/R_eq 1.00138
+step 4175 [1-loop]: dA +2.07e-05 isoper 0.98447 r/R_eq 1.00137
+step 4200 [1-loop]: dA +1.99e-05 isoper 0.98481 r/R_eq 1.00135
+step 4225 [1-loop]: dA +1.91e-05 isoper 0.98513 r/R_eq 1.00134
+step 4250 [1-loop]: dA +1.84e-05 isoper 0.98544 r/R_eq 1.00133
+step 4275 [1-loop]: dA +1.76e-05 isoper 0.98575 r/R_eq 1.00132
+step 4300 [1-loop]: dA +1.69e-05 isoper 0.98604 r/R_eq 1.00131
+step 4325 [1-loop]: dA +1.62e-05 isoper 0.98632 r/R_eq 1.00130
+step 4350 [1-loop]: dA +1.55e-05 isoper 0.98659 r/R_eq 1.00129
+step 4375 [1-loop]: dA +1.48e-05 isoper 0.98685 r/R_eq 1.00128
+completed 4400/4400 steps in 0.99 h; stop = None; err = None
+wrote results/two_ellipses/two_ellipses_bie.json

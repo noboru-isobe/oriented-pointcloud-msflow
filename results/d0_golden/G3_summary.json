@@ -1,0 +1,202 @@
+{
+ "schema_version": 2,
+ "name": "G3",
+ "git_commit": "fffceab1446e8c74e98b6ea0192ee96586648d0f",
+ "torch": "2.6.0+cu124",
+ "n_steps": 4,
+ "n_removed": [
+  14,
+  0,
+  0,
+  0
+ ],
+ "support_states": [
+  [
+   0,
+   "pre_mm",
+   "touching_or_unresolved"
+  ],
+  [
+   0,
+   "post_mm_candidate",
+   "touching_or_unresolved"
+  ],
+  [
+   0,
+   "post_redistribution",
+   "touching_or_unresolved"
+  ],
+  [
+   0,
+   "post_deletion_raw",
+   "open_after_deletion"
+  ],
+  [
+   0,
+   "post_deletion_final",
+   "single_closed"
+  ],
+  [
+   1,
+   "pre_mm",
+   "single_closed"
+  ],
+  [
+   1,
+   "post_mm_candidate",
+   "single_closed"
+  ],
+  [
+   1,
+   "post_redistribution",
+   "single_closed"
+  ],
+  [
+   1,
+   "post_deletion_raw",
+   "single_closed"
+  ],
+  [
+   1,
+   "post_deletion_final",
+   "single_closed"
+  ],
+  [
+   2,
+   "pre_mm",
+   "single_closed"
+  ],
+  [
+   2,
+   "post_mm_candidate",
+   "single_closed"
+  ],
+  [
+   2,
+   "post_redistribution",
+   "single_closed"
+  ],
+  [
+   2,
+   "post_deletion_raw",
+   "single_closed"
+  ],
+  [
+   2,
+   "post_deletion_final",
+   "single_closed"
+  ],
+  [
+   3,
+   "pre_mm",
+   "single_closed"
+  ],
+  [
+   3,
+   "post_mm_candidate",
+   "single_closed"
+  ],
+  [
+   3,
+   "post_redistribution",
+   "single_closed"
+  ],
+  [
+   3,
+   "post_deletion_raw",
+   "single_closed"
+  ],
+  [
+   3,
+   "post_deletion_final",
+   "single_closed"
+  ]
+ ],
+ "volume_legacy_lagged": [
+  3.0493343543250773,
+  3.0806499475707074,
+  3.080851904131467,
+  3.110159804356744,
+  3.1224040300866083
+ ],
+ "volume_current": [
+  3.0493343543250777,
+  3.0806499475707074,
+  3.109957520393997,
+  3.1221773618003286,
+  3.1262780114274604
+ ],
+ "volume_geometric": [
+  3.1328142581449034,
+  3.1293568602979525,
+  3.132002753243017,
+  3.1329890419121913,
+  3.133532741915115
+ ],
+ "config": {
+  "time_step": 1e-05,
+  "perimeter_sigma": null,
+  "perimeter_kernel": "wendland_c2",
+  "perimeter_c_sigma": 3.0,
+  "mass_delta": null,
+  "mass_tau": null,
+  "mass_k_min": 1.0,
+  "mass_kernel": "wendland_c2",
+  "optimizer_method": "trust-ncg",
+  "optimizer_max_iter": 200,
+  "optimizer_tol": 1e-08,
+  "optimizer_lr": 0.5,
+  "optimizer_disp": 0,
+  "bem_method": "point",
+  "bem_epsilon_scale": 0.1,
+  "bem_n_endpoints": 3,
+  "bem_trace_side": "legacy_exterior",
+  "bem_epsilon_mode": "sigma",
+  "bem_epsilon": null,
+  "angle_sigma": null,
+  "bem_solver_mode": "legacy_global_projection",
+  "bem_component_rank": null,
+  "initial_rank_certificate": null,
+  "initial_rank_certificate_provenance": "",
+  "cu_continuation_max_deg": 30.0,
+  "wlin_analytic_gradient": false,
+  "bem_svd_method": "full",
+  "bem_rank_mode": "oracle",
+  "bem_rank_max": 4,
+  "bem_rank_null_tol": 0.05,
+  "bem_rank_gap_min": 30.0,
+  "bem_operator_measure": "visible",
+  "angle_constraint_rcond": null,
+  "use_unit_coherence": false,
+  "wlin_use_coherence_velocity": true,
+  "displacement_q_suppress": false,
+  "compile": false,
+  "remove_dead_points": true,
+  "dead_point_threshold": 0.3,
+  "dead_point_interval": 1,
+  "mass_bandwidth_type": "global",
+  "mass_delta_adaptive": false,
+  "mass_knn_k": 10,
+  "redistribute": true,
+  "redistribute_n_iters": 3,
+  "redistribute_step_size": 0.01,
+  "redistribute_tol": 0.0001,
+  "redistribute_interval": 1,
+  "redistribute_delta_ratio": 0.5,
+  "redistribute_max_disp_ratio": 0.05,
+  "redistribute_n_iters_after_removal": 3,
+  "redistribution_schedule": "every_step",
+  "redistribute_physical_interval": 0.0,
+  "redistribute_trigger_cv": 0.15,
+  "enforce_support_gates": false,
+  "bem_setup_telemetry": false,
+  "rank_theta_const_deg": 15.0,
+  "backend": "naive",
+  "metric_backend": "bem",
+  "grid_metric": null,
+  "grid_volume_target_mode": "current_divergence",
+  "optimizer_variable": "displacement",
+  "redistribution_rule": "legacy_hybrid",
+  "dead_point_rule": "legacy_lagged"
+ }
+}

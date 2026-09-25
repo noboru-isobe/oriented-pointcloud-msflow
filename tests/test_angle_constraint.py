@@ -91,6 +91,65 @@ class TestKernelGradient:
         diag = torch.diagonal(grad, dim1=0, dim2=1)  # (2, N)
         assert torch.allclose(diag, torch.zeros_like(diag), atol=1e-6)
 
+    @pytest.mark.parametrize("kernel", KERNELS)
+    def test_gradient_is_exact_gradient_of_mollifier(self, kernel):
+        """∇ψ from compute_kernel_gradient must be the derivative of
+        the NORMALIZED mollifier that mollifier_2d evaluates -- same
+        C_2D on both. The original implementation omitted C_2D, so the
+        angle map A^†B under-rotated normals by exactly 1/C_2D
+        (π/7 ≈ 0.449 for wendland_c2) at EVERY wavenumber: a secular
+        θ-drift along any trajectory whose normals rotate. This pin
+        makes that class of normalization mismatch impossible."""
+        from src.torch.perimeter.coherence_perimeter import mollifier_2d
+        torch.manual_seed(3)
+        sigma = 0.1
+        d = 0.04 * torch.randn(80, 2, dtype=torch.float64)
+        d = d[(d.norm(dim=1) > 0.005) & (d.norm(dim=1) < 0.09)]
+        g = compute_kernel_gradient(d[None, :, :], sigma, kernel)[0]
+        eps = 1e-7
+        g_fd = torch.zeros_like(g)
+        for k in range(2):
+            dp, dm = d.clone(), d.clone()
+            dp[:, k] += eps
+            dm[:, k] -= eps
+            fp = mollifier_2d(dp[None, :, :], sigma, kernel)[0]
+            fm = mollifier_2d(dm[None, :, :], sigma, kernel)[0]
+            g_fd[:, k] = (fp - fm) / (2 * eps)
+        assert float((g - g_fd).norm() / g_fd.norm()) < 1e-6
+
+    def test_angle_map_transfer_factor_is_one(self):
+        """End-to-end pin of the fix: on the unit circle with the
+        production-scale bandwidth, the solved map A^†B applied to
+        s = cos(kφ) must return -∂s/∂ℓ = k sin(kφ) with unit transfer
+        factor (small quadrature error only). Before the fix the
+        factor was 0.4461 uniformly -- normals lagging the geometry by
+        55% of every step's rotation."""
+        import math
+
+        from src.torch.solver.mm_step import solve_angle_map
+
+        N = 256
+        v = generate_oriented_circle(N, 1.0, (0.0, 0.0), "cpu",
+                                     torch.float64)
+        pos = v.positions
+        delta, tau = compute_recommended_params(pos)
+        m = compute_masses(pos, delta, tau)
+        q = torch.ones(N, dtype=torch.float64)
+        ang = v.angles
+        t = torch.stack([-torch.sin(ang), torch.cos(ang)], dim=1)
+        A, B = compute_angle_constraint_matrices(pos, t, m, q, 0.1)
+        sol = solve_angle_map(A, B)
+        phi = torch.atan2(pos[:, 1], pos[:, 0])
+        for k in (1, 2, 4, 8):
+            s = torch.cos(k * phi)
+            dth_exact = k * torch.sin(k * phi)
+            dth = sol.AB_solve @ s
+            c = float((dth * dth_exact).sum() / (dth_exact ** 2).sum())
+            shape_resid = float((dth - c * dth_exact).norm()
+                                / dth_exact.norm())
+            assert abs(c - 1.0) < 0.02, f"k={k}: transfer {c}"
+            assert shape_resid < 1e-10, f"k={k}: shape {shape_resid}"
+
     @pytest.mark.parametrize("device", DEVICES)
     @pytest.mark.parametrize("kernel", KERNELS)
     def test_outside_support_is_zero(self, device, kernel):

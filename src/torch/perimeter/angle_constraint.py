@@ -17,7 +17,10 @@ and m_eff = m * q (effective mass with coherence weighting).
 import torch
 from typing import Literal
 
-from src.torch.perimeter.coherence_perimeter import mollifier_2d
+from src.torch.perimeter.coherence_perimeter import (
+    MOLLIFIER_2D_CONSTANTS,
+    mollifier_2d,
+)
 
 
 # Kernel derivatives η'(u) for gradient computation
@@ -33,7 +36,16 @@ def compute_kernel_gradient(
     sigma: float,
     kernel: Literal["wendland_c2", "biweight", "epanechnikov"] = "wendland_c2",
 ) -> torch.Tensor:
-    """Compute kernel gradient ∇ψ_σ(z) = (1/σ³) η'(u) z/r.
+    """Compute kernel gradient ∇ψ_σ(z) = (C_2D/σ³) η'(u) z/r.
+
+    This is the EXACT gradient of the normalized mollifier
+    ψ_σ(z) = (C_2D/σ²) η(|z|/σ) that `mollifier_2d` evaluates -- the
+    same C_2D must appear here, or any weak form pairing ψ (A side)
+    with ∇ψ (B side) picks up a spurious uniform factor 1/C_2D.
+    That bug shipped: the angle map A^†B rotated normals by
+    1/C_2D = π/7 ≈ 0.449 of the geometric rotation (measured on the
+    unit circle: factor 0.4461 at every wavenumber, shape residual
+    1e-13), so stored angles secularly lagged the evolving curve.
 
     Args:
         diff: (..., 2) displacement vectors z
@@ -54,7 +66,8 @@ def compute_kernel_gradient(
     r_safe = torch.where(r > 1e-10, r, torch.ones_like(r))
     z_hat = diff / r_safe.unsqueeze(-1)
 
-    return (sigma ** -3) * (eta_prime * mask_r).unsqueeze(-1) * z_hat
+    C_2D = MOLLIFIER_2D_CONSTANTS[kernel]
+    return (C_2D * sigma ** -3) * (eta_prime * mask_r).unsqueeze(-1) * z_hat
 
 
 def compute_angle_constraint_matrices(
@@ -84,19 +97,31 @@ def compute_angle_constraint_matrices(
         A: (N, N) matrix, A_{ℓi} = m_eff_i ψ(x_i - x_ℓ)
         B: (N, N) matrix, B_{ℓi} = m_eff_i (t_i · ∇ψ(x_i - x_ℓ))
     """
-    # Pairwise differences: diff[ℓ, i] = x_i - x_ℓ
+    # delegate to the explicit-weight builder (0L-theta: the actual
+    # measure weight is stated once; visible_full == m * q here)
+    return compute_angle_constraint_matrices_from_weights(
+        positions, tangents, masses * coherence, sigma, kernel)
+
+
+def compute_angle_constraint_matrices_from_weights(
+    positions: torch.Tensor,
+    tangents: torch.Tensor,
+    angle_weights: torch.Tensor,
+    sigma: float,
+    kernel: Literal["wendland_c2", "biweight",
+                    "epanechnikov"] = "wendland_c2",
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """0L-theta explicit-measure builder: A_{li} = w_i psi(x_i-x_l),
+    B_{li} = w_i t_i . grad-psi(x_i-x_l) with the measure weight
+    w^angle stated by the caller -- visible_full uses w = m q^full;
+    raw_loopwise uses the RAW loopwise mass w = m~^loop (the visible
+    weight injects the spurious kinematic term -s d_tau log q on a
+    nonuniform-q loop and carries a cross-loop dependence through
+    q^full even under a same-loop kernel mask)."""
     diff = positions[None, :, :] - positions[:, None, :]  # (N, N, 2)
-
-    # Effective mass
-    m_eff = masses * coherence  # (N,)
-
-    # A_{ℓi} = m_eff_i ψ(x_i - x_ℓ)
-    psi = mollifier_2d(diff, sigma, kernel)  # (N, N)
-    A = m_eff[None, :] * psi  # (N, N)
-
-    # B_{ℓi} = m_eff_i (t_i · ∇ψ(x_i - x_ℓ))
-    grad = compute_kernel_gradient(diff, sigma, kernel)  # (N, N, 2)
-    t_dot_grad = (tangents[None, :, :] * grad).sum(dim=-1)  # (N, N)
-    B = m_eff[None, :] * t_dot_grad  # (N, N)
-
+    psi = mollifier_2d(diff, sigma, kernel)               # (N, N)
+    A = angle_weights[None, :] * psi
+    grad = compute_kernel_gradient(diff, sigma, kernel)   # (N, N, 2)
+    t_dot_grad = (tangents[None, :, :] * grad).sum(dim=-1)
+    B = angle_weights[None, :] * t_dot_grad
     return A, B

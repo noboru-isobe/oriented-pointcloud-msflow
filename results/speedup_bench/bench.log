@@ -1,0 +1,34 @@
+machine: load=(0.30224609375, 1.08056640625, 1.6845703125) omp=4
+  pair_nper128 off            rep0: 0.844s/step
+  pair_nper128 off            rep1: 0.842s/step
+  pair_nper128 off            rep2: 0.833s/step
+  pair_nper128 off            BEST 0.833s/step
+  pair_nper128 quad           rep0: 0.772s/step
+  pair_nper128 quad           rep1: 0.806s/step
+  pair_nper128 quad           rep2: 0.821s/step
+  pair_nper128 quad           BEST 0.772s/step  speedup=1.08x dx=4.2e-11
+  pair_nper128 quad+kern      rep0: 0.932s/step
+  pair_nper128 quad+kern      rep1: 0.953s/step
+  pair_nper128 quad+kern      rep2: 0.968s/step
+  pair_nper128 quad+kern      BEST 0.932s/step  speedup=0.89x dx=8.4e-11
+  pair_nper128 quad+kern+lob  rep0: 1.183s/step
+  pair_nper128 quad+kern+lob  rep1: 1.398s/step
+  pair_nper128 quad+kern+lob  rep2: 0.880s/step
+  pair_nper128 quad+kern+lob  BEST 0.880s/step  speedup=0.95x dx=9.5e-11
+  pair_nper256 off            rep0: 3.109s/step
+  pair_nper256 off            rep1: 3.221s/step
+  pair_nper256 off            rep2: 3.103s/step
+  pair_nper256 off            BEST 3.103s/step
+  pair_nper256 quad           rep0: 3.168s/step
+  pair_nper256 quad           rep1: 3.114s/step
+  pair_nper256 quad           rep2: 3.175s/step
+  pair_nper256 quad           BEST 3.114s/step  speedup=1.00x dx=1.6e-13
+  pair_nper256 quad+kern      rep0: 3.720s/step
+  pair_nper256 quad+kern      rep1: 3.593s/step
+  pair_nper256 quad+kern      rep2: 3.496s/step
+  pair_nper256 quad+kern      BEST 3.496s/step  speedup=0.89x dx=6.2e-14
+  pair_nper256 quad+kern+lob  rep0: 2.554s/step
+  pair_nper256 quad+kern+lob  rep1: 2.531s/step
+  pair_nper256 quad+kern+lob  rep2: 2.506s/step
+  pair_nper256 quad+kern+lob  BEST 2.506s/step  speedup=1.24x dx=1.8e-11
+raw results -> results/speedup_bench/speedup_bench.json

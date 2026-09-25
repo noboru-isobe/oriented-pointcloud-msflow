@@ -146,6 +146,48 @@ def compute_vector_field(
     return V
 
 
+def compute_coherence_loopwise(
+    positions: torch.Tensor,
+    normals: torch.Tensor,
+    masses: torch.Tensor,
+    sigma: float,
+    kernel: Literal["wendland_c2", "biweight", "epanechnikov"] = "wendland_c2",
+    loop_labels: torch.Tensor = None,
+    backend: Literal["naive"] = "naive",
+):
+    """0J: SELF-coherence q_i^self -- the coherence computed from
+    SAME-LOOP points only (K^self_ij = K_ij 1[l(i)=l(j)]).
+
+    Used by the self-coherence renormalization q^WB = r_l q^self,
+    which separates the loop's intrinsic geometry (kept as the
+    profile) from the cross-loop kernel interaction (compressed into
+    the loopwise scalar r_l). Uses the SAME mollifier, sums and clamp
+    as the full pipeline, so with zero cross-loop overlap the result
+    is bitwise the full coherence.
+
+    Returns (q_self, cross_max) where cross_max = max_{l(i) != l(j)}
+    K_ij -- the identity certificate for the regular regime (asserted
+    zero in the clean-shape identity tests, telemetry otherwise).
+
+    backend="naive" only: the masked full matrix is the point; a
+    keops variant is NOT silently substituted."""
+    if backend != "naive":
+        raise NotImplementedError(
+            "compute_coherence_loopwise supports backend='naive' only "
+            "(masked full kernel matrix); refusing silent fallback")
+    if loop_labels is None:
+        raise ValueError("loop_labels is required")
+    z = positions.unsqueeze(1) - positions.unsqueeze(0)
+    K = mollifier_2d(z, sigma, kernel)
+    same = loop_labels.unsqueeze(1) == loop_labels.unsqueeze(0)
+    cross_max = float((K * (~same)).max()) if K.numel() else 0.0
+    Km = K * same
+    U = (Km * masses.unsqueeze(0)).sum(dim=1)
+    V = torch.einsum("ij,jd->id", Km * masses.unsqueeze(0), normals)
+    q = torch.clamp(compute_coherence(U, V), 0.0, 1.0)
+    return q, cross_max
+
+
 def compute_coherence(
     U: torch.Tensor,
     V: torch.Tensor,

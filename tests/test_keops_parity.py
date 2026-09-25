@@ -20,6 +20,8 @@ from typing import Callable
 import pytest
 import torch
 
+pytest.importorskip("pykeops", reason="optional extra: uv sync --extra keops")
+
 from src.torch.oriented_varifold.mass import compute_kde_density
 from src.torch.perimeter.coherence_perimeter import (
     compute_scalar_density,

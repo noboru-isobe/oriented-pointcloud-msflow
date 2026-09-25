@@ -1,0 +1,1084 @@
+{
+  "meta": {
+    "dt": 1e-05,
+    "h": 0.05,
+    "q": "identically 1",
+    "u": "m",
+    "rank_null_tol": 0.05,
+    "rank_gap_min": 30.0
+  },
+  "parity": [
+    {
+      "name": "disk",
+      "N": 126,
+      "C_true": 1,
+      "C_auto": 1,
+      "rank_gap_ratio": 153.27541983697802,
+      "rank_abs_level": 0.006391539245572201,
+      "spectrum_head": [
+        0.006391539245572201,
+        0.979665861269601,
+        0.9796658612696011,
+        0.9797639641542788,
+        0.9797639641542798,
+        0.9798611869967033
+      ],
+      "max_s_diff": 0.0,
+      "objective_diff": 0.0,
+      "max_s_over_dt": 0.0,
+      "fluxes_over_dt": [
+        0.0
+      ],
+      "leakage_m": [
+        0.0
+      ],
+      "r_comp": 0.0,
+      "objective_decreased": true
+    },
+    {
+      "name": "annulus",
+      "N": 189,
+      "C_true": 1,
+      "C_auto": 1,
+      "rank_gap_ratio": 91.35739686028559,
+      "rank_abs_level": 0.0021738438231027214,
+      "spectrum_head": [
+        0.0021738438231027214,
+        0.19859671285947578,
+        0.19859671285947586,
+        0.30207596722830843,
+        0.3020759672283087,
+        0.3547696072701057
+      ],
+      "max_s_diff": 0.0,
+      "objective_diff": 0.0,
+      "max_s_over_dt": 8.671034103671374,
+      "fluxes_over_dt": [
+        -0.12664127589904434
+      ],
+      "leakage_m": [
+        0.0023261231141261524
+      ],
+      "r_comp": 5.862761790587169e-17,
+      "objective_decreased": true
+    },
+    {
+      "name": "two_disks",
+      "N": 189,
+      "C_true": 2,
+      "C_auto": 2,
+      "rank_gap_ratio": 74.01245556077575,
+      "rank_abs_level": 0.011742582254974791,
+      "spectrum_head": [
+        0.00566980337342157,
+        0.011742582254974791,
+        0.8690973473150756,
+        0.8964664527029123,
+        0.8979119325320655,
+        0.8983228100041033
+      ],
+      "max_s_diff": 0.0,
+      "objective_diff": 0.0,
+      "max_s_over_dt": 0.013406269528720281,
+      "fluxes_over_dt": [
+        -8.611895737882703e-05,
+        -2.218366196201793e-05
+      ],
+      "leakage_m": [
+        0.00843750875362784,
+        0.0007424318962199663
+      ],
+      "r_comp": 2.0052064933196413e-17,
+      "objective_decreased": true
+    },
+    {
+      "name": "two_ellipses",
+      "N": 197,
+      "C_true": 2,
+      "C_auto": 2,
+      "rank_gap_ratio": 58.49896118285861,
+      "rank_abs_level": 0.009858453966035043,
+      "spectrum_head": [
+        0.004976214314546619,
+        0.009858453966035043,
+        0.5767093158820825,
+        0.664992172612496,
+        0.7230993607383317,
+        0.7447349998622417
+      ],
+      "max_s_diff": 0.0,
+      "objective_diff": 0.0,
+      "max_s_over_dt": 15.20876922534378,
+      "fluxes_over_dt": [
+        -0.06377614018075477,
+        -0.01623766050575083
+      ],
+      "leakage_m": [
+        0.004898235420693533,
+        0.0032395636089836417
+      ],
+      "r_comp": 2.2883010894282836e-16,
+      "objective_decreased": true
+    },
+    {
+      "name": "annulus_disk",
+      "N": 264,
+      "C_true": 2,
+      "C_auto": 2,
+      "rank_gap_ratio": 45.56803848081003,
+      "rank_abs_level": 0.0043204512016685424,
+      "spectrum_head": [
+        0.0020680342653038755,
+        0.0043204512016685424,
+        0.19687448661209409,
+        0.20034470707689625,
+        0.3003860544370453,
+        0.3008715987034318
+      ],
+      "max_s_diff": 0.0,
+      "objective_diff": 0.0,
+      "max_s_over_dt": 8.679712889275352,
+      "fluxes_over_dt": [
+        -0.13429625808421589,
+        0.0009101901697345776
+      ],
+      "leakage_m": [
+        0.002466462673918856,
+        0.04774135314758982
+      ],
+      "r_comp": 3.668599678120939e-17,
+      "objective_decreased": true
+    },
+    {
+      "name": "three_disks",
+      "N": 290,
+      "C_true": 3,
+      "C_auto": 3,
+      "rank_gap_ratio": 72.17470763330513,
+      "rank_abs_level": 0.010729776197230938,
+      "spectrum_head": [
+        0.00501746456039898,
+        0.006189482909699724,
+        0.010729776197230938,
+        0.7744184600059395,
+        0.799435537922704,
+        0.8218705291172665
+      ],
+      "max_s_diff": 0.0,
+      "objective_diff": 0.0,
+      "max_s_over_dt": 0.0133528993904125,
+      "fluxes_over_dt": [
+        -0.00011217973289893418,
+        -0.00010287043303492844,
+        -1.968135297394518e-05
+      ],
+      "leakage_m": [
+        0.006325275518228352,
+        0.003929526024075841,
+        0.0006687144518390038
+      ],
+      "r_comp": 3.7397156836516316e-17,
+      "objective_decreased": true
+    }
+  ],
+  "evolutions": [
+    {
+      "name": "two_disks",
+      "n_steps": 20,
+      "frames": [
+        {
+          "step": 0,
+          "C": 2,
+          "rank_gap_ratio": 74.01245556077575,
+          "rank_abs_level": 0.011742582254974791,
+          "subspace_angle_deg": null,
+          "max_s_over_dt": 0.013406269528720281,
+          "fluxes_over_dt": [
+            -8.611895737882703e-05,
+            -2.218366196201793e-05
+          ],
+          "leakage_m": [
+            0.00843750875362784,
+            0.0007424318962199663
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 1,
+          "C": 2,
+          "rank_gap_ratio": 74.01245490139154,
+          "rank_abs_level": 0.011742581900501448,
+          "subspace_angle_deg": 2.6315071101596265e-05,
+          "max_s_over_dt": 0.013404307210766804,
+          "fluxes_over_dt": [
+            -8.611673973237458e-05,
+            -2.218059281969985e-05
+          ],
+          "leakage_m": [
+            0.008437714543440198,
+            0.000742334378980311
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 2,
+          "C": 2,
+          "rank_gap_ratio": 74.01245424076525,
+          "rank_abs_level": 0.011742581546391958,
+          "subspace_angle_deg": 2.6384230409038572e-05,
+          "max_s_over_dt": 0.013402347022038085,
+          "fluxes_over_dt": [
+            -8.611452247558181e-05,
+            -2.2177524583626495e-05
+          ],
+          "leakage_m": [
+            0.008437920683405365,
+            0.0007422368986982359
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 3,
+          "C": 2,
+          "rank_gap_ratio": 74.01245357890187,
+          "rank_abs_level": 0.011742581192645443,
+          "subspace_angle_deg": 2.6466983033799646e-05,
+          "max_s_over_dt": 0.013400388958643992,
+          "fluxes_over_dt": [
+            -8.611230560815015e-05,
+            -2.2174457252962004e-05
+          ],
+          "leakage_m": [
+            0.008438127171570813,
+            0.0007421394553466638
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 4,
+          "C": 2,
+          "rank_gap_ratio": 74.0124529157969,
+          "rank_abs_level": 0.011742580839262379,
+          "subspace_angle_deg": 2.6466983033799646e-05,
+          "max_s_over_dt": 0.013398433012991586,
+          "fluxes_over_dt": [
+            -8.611008912984185e-05,
+            -2.217139082691195e-05
+          ],
+          "leakage_m": [
+            0.008438334005831463,
+            0.0007420420489017626
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 5,
+          "C": 2,
+          "rank_gap_ratio": 74.01245225145372,
+          "rank_abs_level": 0.011742580486242164,
+          "subspace_angle_deg": 2.645320890690588e-05,
+          "max_s_over_dt": 0.013396479179954839,
+          "fluxes_over_dt": [
+            -8.61078730403595e-05,
+            -2.2168325304581238e-05
+          ],
+          "leakage_m": [
+            0.008438541184176746,
+            0.000741944679331539
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 6,
+          "C": 2,
+          "rank_gap_ratio": 74.01245158587466,
+          "rank_abs_level": 0.011742580133584235,
+          "subspace_angle_deg": 2.634275661277943e-05,
+          "max_s_over_dt": 0.013394527451684402,
+          "fluxes_over_dt": [
+            -8.610565733944159e-05,
+            -2.216526068512863e-05
+          ],
+          "leakage_m": [
+            0.008438748704692647,
+            0.0007418473466109202
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 7,
+          "C": 2,
+          "rank_gap_ratio": 74.01245091905606,
+          "rank_abs_level": 0.011742579781289064,
+          "subspace_angle_deg": 2.6398040527968538e-05,
+          "max_s_over_dt": 0.013392577822259196,
+          "fluxes_over_dt": [
+            -8.610344202682191e-05,
+            -2.2162196967708998e-05
+          ],
+          "leakage_m": [
+            0.008438956565292364,
+            0.0007417500507177848
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 8,
+          "C": 2,
+          "rank_gap_ratio": 74.01245025100062,
+          "rank_abs_level": 0.011742579429356081,
+          "subspace_angle_deg": 2.645320890690588e-05,
+          "max_s_over_dt": 0.013390630283375156,
+          "fluxes_over_dt": [
+            -8.61012271022107e-05,
+            -2.2159134151490852e-05
+          ],
+          "leakage_m": [
+            0.008439164764058904,
+            0.0007416527916204959
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 9,
+          "C": 2,
+          "rank_gap_ratio": 74.01244958170646,
+          "rank_abs_level": 0.011742579077785443,
+          "subspace_angle_deg": 2.623183925019106e-05,
+          "max_s_over_dt": 0.013388684831121201,
+          "fluxes_over_dt": [
+            -8.609901256538092e-05,
+            -2.2156072235617403e-05
+          ],
+          "leakage_m": [
+            0.008439373299079166,
+            0.0007415555692964689
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 10,
+          "C": 2,
+          "rank_gap_ratio": 74.01244891117642,
+          "rank_abs_level": 0.01174257872657655,
+          "subspace_angle_deg": 2.621794158603666e-05,
+          "max_s_over_dt": 0.01338674145887971,
+          "fluxes_over_dt": [
+            -8.609679841605239e-05,
+            -2.2153011219273546e-05
+          ],
+          "leakage_m": [
+            0.008439582168332812,
+            0.0007414583837127184
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 11,
+          "C": 2,
+          "rank_gap_ratio": 74.01244823941039,
+          "rank_abs_level": 0.011742578375729276,
+          "subspace_angle_deg": 2.623183925019106e-05,
+          "max_s_over_dt": 0.01338480016240085,
+          "fluxes_over_dt": [
+            -8.609458465396304e-05,
+            -2.2149951101620605e-05
+          ],
+          "leakage_m": [
+            0.008439791369930436,
+            0.0007413612348455873
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 12,
+          "C": 2,
+          "rank_gap_ratio": 74.012447566408,
+          "rank_abs_level": 0.011742578025243559,
+          "subspace_angle_deg": 2.623183925019106e-05,
+          "max_s_over_dt": 0.013382860931407324,
+          "fluxes_over_dt": [
+            -8.609237127883568e-05,
+            -2.2146891881782882e-05
+          ],
+          "leakage_m": [
+            0.00844000090201566,
+            0.0007412641226664113
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 13,
+          "C": 2,
+          "rank_gap_ratio": 74.01244689216949,
+          "rank_abs_level": 0.011742577675119251,
+          "subspace_angle_deg": 2.637041305778508e-05,
+          "max_s_over_dt": 0.01338092376357102,
+          "fluxes_over_dt": [
+            -8.609015829041705e-05,
+            -2.2143833558970547e-05
+          ],
+          "leakage_m": [
+            0.008440210762584204,
+            0.0007411670471477923
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 14,
+          "C": 2,
+          "rank_gap_ratio": 74.01244621669736,
+          "rank_abs_level": 0.01174257732535573,
+          "subspace_angle_deg": 2.6398040527968538e-05,
+          "max_s_over_dt": 0.013378988649708497,
+          "fluxes_over_dt": [
+            -8.608794568842911e-05,
+            -2.2140776132320845e-05
+          ],
+          "leakage_m": [
+            0.008440420949768756,
+            0.0007410700082685908
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 15,
+          "C": 2,
+          "rank_gap_ratio": 74.01244553998889,
+          "rank_abs_level": 0.011742576975953344,
+          "subspace_angle_deg": 2.623183925019106e-05,
+          "max_s_over_dt": 0.013377055586701731,
+          "fluxes_over_dt": [
+            -8.608573347261747e-05,
+            -2.213771960100594e-05
+          ],
+          "leakage_m": [
+            0.008440631461767677,
+            0.0007409730059928028
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 16,
+          "C": 2,
+          "rank_gap_ratio": 74.01244486204493,
+          "rank_abs_level": 0.011742576626911827,
+          "subspace_angle_deg": 2.6259612512867202e-05,
+          "max_s_over_dt": 0.013375124563513507,
+          "fluxes_over_dt": [
+            -8.608352164273745e-05,
+            -2.213466396419017e-05
+          ],
+          "leakage_m": [
+            0.00844084229667164,
+            0.0007408760403011279
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 17,
+          "C": 2,
+          "rank_gap_ratio": 74.01244418286836,
+          "rank_abs_level": 0.011742576278230563,
+          "subspace_angle_deg": 2.6398040527968538e-05,
+          "max_s_over_dt": 0.01337319558121938,
+          "fluxes_over_dt": [
+            -8.608131019853676e-05,
+            -2.213160922106815e-05
+          ],
+          "leakage_m": [
+            0.008441053452642216,
+            0.0007407791111643627
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 18,
+          "C": 2,
+          "rank_gap_ratio": 74.01244350245679,
+          "rank_abs_level": 0.011742575929909793,
+          "subspace_angle_deg": 2.650826247094554e-05,
+          "max_s_over_dt": 0.013371268629772873,
+          "fluxes_over_dt": [
+            -8.607909913972535e-05,
+            -2.2128555370776222e-05
+          ],
+          "leakage_m": [
+            0.008441264927858587,
+            0.0007406822185544702
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 19,
+          "C": 2,
+          "rank_gap_ratio": 74.01244282081252,
+          "rank_abs_level": 0.011742575581949043,
+          "subspace_angle_deg": 2.645320890690588e-05,
+          "max_s_over_dt": 0.013369343704176218,
+          "fluxes_over_dt": [
+            -8.607688846603343e-05,
+            -2.212550241250019e-05
+          ],
+          "leakage_m": [
+            0.008441476720495913,
+            0.0007405853624426416
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        }
+      ],
+      "worst_position_diff": 0.0,
+      "worst_angle_diff": 0.0
+    },
+    {
+      "name": "two_ellipses",
+      "n_steps": 20,
+      "frames": [
+        {
+          "step": 0,
+          "C": 2,
+          "rank_gap_ratio": 58.49896118285861,
+          "rank_abs_level": 0.009858453966035043,
+          "subspace_angle_deg": null,
+          "max_s_over_dt": 15.20876922534378,
+          "fluxes_over_dt": [
+            -0.06377614018075477,
+            -0.01623766050575083
+          ],
+          "leakage_m": [
+            0.004898235420693533,
+            0.0032395636089836417
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 1,
+          "C": 2,
+          "rank_gap_ratio": 58.68424128426276,
+          "rank_abs_level": 0.009828229796753962,
+          "subspace_angle_deg": 0.1206437038836544,
+          "max_s_over_dt": 14.9794968357022,
+          "fluxes_over_dt": [
+            -0.05806852752571374,
+            -0.016075790309504352
+          ],
+          "leakage_m": [
+            0.0044618013760861115,
+            0.0032060460445544883
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 2,
+          "C": 2,
+          "rank_gap_ratio": 58.81799351386122,
+          "rank_abs_level": 0.009806887312442794,
+          "subspace_angle_deg": 0.11870276502381735,
+          "max_s_over_dt": 14.77219785066818,
+          "fluxes_over_dt": [
+            -0.05278107001023483,
+            -0.01591593789852194
+          ],
+          "leakage_m": [
+            0.00405742658151244,
+            0.003173048235697381
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 3,
+          "C": 2,
+          "rank_gap_ratio": 58.90214920708597,
+          "rank_abs_level": 0.009793982521202527,
+          "subspace_angle_deg": 0.11685176012976833,
+          "max_s_over_dt": 14.573440452061307,
+          "fluxes_over_dt": [
+            -0.047881328469008264,
+            -0.015758019802258657
+          ],
+          "leakage_m": [
+            0.0036827429043486373,
+            0.0031405417095131025
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 4,
+          "C": 2,
+          "rank_gap_ratio": 58.93914986825832,
+          "rank_abs_level": 0.009789033857472852,
+          "subspace_angle_deg": 0.11508038148238399,
+          "max_s_over_dt": 14.386019447135215,
+          "fluxes_over_dt": [
+            -0.04333883795392307,
+            -0.015601858867063266
+          ],
+          "leakage_m": [
+            0.003335245502864683,
+            0.0031084852095899732
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 5,
+          "C": 2,
+          "rank_gap_ratio": 58.930295892011806,
+          "rank_abs_level": 0.009791795800781725,
+          "subspace_angle_deg": 0.11338819161878864,
+          "max_s_over_dt": 14.20716209306475,
+          "fluxes_over_dt": [
+            -0.039130657108856506,
+            -0.015447606584320876
+          ],
+          "leakage_m": [
+            0.0030132107817651493,
+            0.0030768968523604934
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 6,
+          "C": 2,
+          "rank_gap_ratio": 58.87818500612768,
+          "rank_abs_level": 0.009801839189575536,
+          "subspace_angle_deg": 0.11175911290102038,
+          "max_s_over_dt": 14.036754672702182,
+          "fluxes_over_dt": [
+            -0.035231836035963714,
+            -0.015295094743173998
+          ],
+          "leakage_m": [
+            0.0027147101432527885,
+            0.003045737215846223
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 7,
+          "C": 2,
+          "rank_gap_ratio": 58.78505441835595,
+          "rank_abs_level": 0.009818827036000672,
+          "subspace_angle_deg": 0.11019211028061097,
+          "max_s_over_dt": 13.873853989321209,
+          "fluxes_over_dt": [
+            -0.03162116233835356,
+            -0.015144265743694096
+          ],
+          "leakage_m": [
+            0.0024381285532719347,
+            0.0030149882664759287
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 8,
+          "C": 2,
+          "rank_gap_ratio": 58.65317293862202,
+          "rank_abs_level": 0.009842442775335225,
+          "subspace_angle_deg": 0.10868235821556267,
+          "max_s_over_dt": 13.71805940384826,
+          "fluxes_over_dt": [
+            -0.028279249166646165,
+            -0.014995078979784525
+          ],
+          "leakage_m": [
+            0.002181978336149341,
+            0.002984636283835896
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 9,
+          "C": 2,
+          "rank_gap_ratio": 58.484821836428445,
+          "rank_abs_level": 0.009872388803252504,
+          "subspace_angle_deg": 0.10722649670007599,
+          "max_s_over_dt": 13.568357988247707,
+          "fluxes_over_dt": [
+            -0.025188726226913434,
+            -0.0148474735560657
+          ],
+          "leakage_m": [
+            0.00194493356709867,
+            0.0029546618861155003
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 10,
+          "C": 2,
+          "rank_gap_ratio": 58.282285052434275,
+          "rank_abs_level": 0.009908383822465294,
+          "subspace_angle_deg": 0.10581902859587161,
+          "max_s_over_dt": 13.425074632445973,
+          "fluxes_over_dt": [
+            -0.0223333266223478,
+            -0.014701413794692222
+          ],
+          "leakage_m": [
+            0.0017257629643573733,
+            0.0029250549907022865
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 11,
+          "C": 2,
+          "rank_gap_ratio": 58.047827002827134,
+          "rank_abs_level": 0.009950162738665952,
+          "subspace_angle_deg": 0.10445821641704087,
+          "max_s_over_dt": 13.28728488474477,
+          "fluxes_over_dt": [
+            -0.01969836048346131,
+            -0.014556856871974257
+          ],
+          "leakage_m": [
+            0.001523346939324058,
+            0.002895801854130932
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 12,
+          "C": 2,
+          "rank_gap_ratio": 57.78368395038961,
+          "rank_abs_level": 0.009997474622899448,
+          "subspace_angle_deg": 0.10314059038146244,
+          "max_s_over_dt": 13.154784085139093,
+          "fluxes_over_dt": [
+            -0.01727027391000413,
+            -0.014413764365985971
+          ],
+          "leakage_m": [
+            0.0013366572080482817,
+            0.0028668907230647344
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 13,
+          "C": 2,
+          "rank_gap_ratio": 57.49205123267302,
+          "rank_abs_level": 0.010050081775453664,
+          "subspace_angle_deg": 0.10186346948845212,
+          "max_s_over_dt": 13.027283901264653,
+          "fluxes_over_dt": [
+            -0.01503658136014813,
+            -0.014272108193744582
+          ],
+          "leakage_m": [
+            0.0011647501588564631,
+            0.0028383115969187775
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 14,
+          "C": 2,
+          "rank_gap_ratio": 57.17507287601329,
+          "rank_abs_level": 0.010107758752977628,
+          "subspace_angle_deg": 0.10062450381226402,
+          "max_s_over_dt": 12.904134497084916,
+          "fluxes_over_dt": [
+            -0.012985739539441998,
+            -0.014131830436573265
+          ],
+          "leakage_m": [
+            0.0010067541162021131,
+            0.002810051367321556
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 15,
+          "C": 2,
+          "rank_gap_ratio": 56.834833313998665,
+          "rank_abs_level": 0.010170291379200586,
+          "subspace_angle_deg": 0.09942126836218315,
+          "max_s_over_dt": 12.785683359470088,
+          "fluxes_over_dt": [
+            -0.01110707501372736,
+            -0.013992931041026077
+          ],
+          "leakage_m": [
+            0.0008618653214406132,
+            0.0027821043877272276
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 16,
+          "C": 2,
+          "rank_gap_ratio": 56.47334880501983,
+          "rank_abs_level": 0.010237476160969242,
+          "subspace_angle_deg": 0.09825213600859979,
+          "max_s_over_dt": 12.6710731954071,
+          "fluxes_over_dt": [
+            -0.009390713138421223,
+            -0.013855355547318543
+          ],
+          "leakage_m": [
+            0.0007293408158819709,
+            0.002754458732156852
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 17,
+          "C": 2,
+          "rank_gap_ratio": 56.09256307198313,
+          "rank_abs_level": 0.010309119254053862,
+          "subspace_angle_deg": 0.09711492186818296,
+          "max_s_over_dt": 12.560281491774097,
+          "fluxes_over_dt": [
+            -0.00782747919243106,
+            -0.013719075841046853
+          ],
+          "leakage_m": [
+            0.0006084925348819291,
+            0.002727106156967483
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 18,
+          "C": 2,
+          "rank_gap_ratio": 55.694341771106274,
+          "rank_abs_level": 0.010385035941873167,
+          "subspace_angle_deg": 0.09600791458551529,
+          "max_s_over_dt": 12.453347768634503,
+          "fluxes_over_dt": [
+            -0.006408857996482782,
+            -0.013584079681121214
+          ],
+          "leakage_m": [
+            0.000498682796653914,
+            0.0027000404918560775
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        },
+        {
+          "step": 19,
+          "C": 2,
+          "rank_gap_ratio": 55.28046860481946,
+          "rank_abs_level": 0.010465050093331082,
+          "subspace_angle_deg": 0.09492983417072032,
+          "max_s_over_dt": 12.350004097390524,
+          "fluxes_over_dt": [
+            -0.00512674093379819,
+            -0.013450334744703201
+          ],
+          "leakage_m": [
+            0.000399303661923272,
+            0.002673253655734136
+          ],
+          "max_position_diff": 0.0,
+          "max_angle_diff": 0.0,
+          "objective_decreased": true
+        }
+      ],
+      "worst_position_diff": 0.0,
+      "worst_angle_diff": 0.0
+    }
+  ],
+  "refinement": [
+    {
+      "name": "two_ellipses",
+      "N": 197,
+      "C_true": 2,
+      "C_auto": 2,
+      "rank_gap_ratio": 58.49896118285861,
+      "rank_abs_level": 0.009858453966035043,
+      "spectrum_head": [
+        0.004976214314546619,
+        0.009858453966035043,
+        0.5767093158820825,
+        0.664992172612496,
+        0.7230993607383317,
+        0.7447349998622417
+      ],
+      "max_s_diff": 0.0,
+      "objective_diff": 0.0,
+      "max_s_over_dt": 15.20876922534378,
+      "fluxes_over_dt": [
+        -0.06377614018075477,
+        -0.01623766050575083
+      ],
+      "leakage_m": [
+        0.004898235420693533,
+        0.0032395636089836417
+      ],
+      "r_comp": 2.2883010894282836e-16,
+      "objective_decreased": true,
+      "h": 0.05
+    },
+    {
+      "name": "two_disks",
+      "N": 189,
+      "C_true": 2,
+      "C_auto": 2,
+      "rank_gap_ratio": 74.01245556077575,
+      "rank_abs_level": 0.011742582254974791,
+      "spectrum_head": [
+        0.00566980337342157,
+        0.011742582254974791,
+        0.8690973473150756,
+        0.8964664527029123,
+        0.8979119325320655,
+        0.8983228100041033
+      ],
+      "max_s_diff": 0.0,
+      "objective_diff": 0.0,
+      "max_s_over_dt": 0.013406269528720281,
+      "fluxes_over_dt": [
+        -8.611895737882703e-05,
+        -2.218366196201793e-05
+      ],
+      "leakage_m": [
+        0.00843750875362784,
+        0.0007424318962199663
+      ],
+      "r_comp": 2.0052064933196413e-17,
+      "objective_decreased": true,
+      "h": 0.05
+    },
+    {
+      "name": "two_ellipses",
+      "N": 329,
+      "C_true": 2,
+      "C_auto": 2,
+      "rank_gap_ratio": 99.93708081722119,
+      "rank_abs_level": 0.005755997496657363,
+      "spectrum_head": [
+        0.0030432543916818064,
+        0.005755997496657363,
+        0.5752375870071698,
+        0.6647442607960559,
+        0.72575982329949,
+        0.7484627762159431
+      ],
+      "max_s_diff": 0.0,
+      "objective_diff": 0.0,
+      "max_s_over_dt": 15.893328400894855,
+      "fluxes_over_dt": [
+        -0.04357401588594594,
+        -0.009459381508278969
+      ],
+      "leakage_m": [
+        0.0033257358671742662,
+        0.0018949155628730703
+      ],
+      "r_comp": 6.909745230636946e-17,
+      "objective_decreased": true,
+      "h": 0.03
+    },
+    {
+      "name": "two_disks",
+      "N": 314,
+      "C_true": 2,
+      "C_auto": 2,
+      "rank_gap_ratio": 127.75556144579815,
+      "rank_abs_level": 0.006831464832027272,
+      "spectrum_head": [
+        0.0035332409258188842,
+        0.006831464832027272,
+        0.8727576251128694,
+        0.9040362353498753,
+        0.9061015716092087,
+        0.9063422734891241
+      ],
+      "max_s_diff": 0.0,
+      "objective_diff": 0.0,
+      "max_s_over_dt": 0.0077396885591430285,
+      "fluxes_over_dt": [
+        -2.8880250851326844e-05,
+        -9.010174061854572e-06
+      ],
+      "leakage_m": [
+        0.004447617464667162,
+        0.0005213117933904828
+      ],
+      "r_comp": 9.988130216254293e-17,
+      "objective_decreased": true,
+      "h": 0.03
+    }
+  ]
+}

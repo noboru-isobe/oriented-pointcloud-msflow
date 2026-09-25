@@ -277,6 +277,37 @@ def compute_recommended_params(
     return delta, tau
 
 
+def compute_recommended_params_oriented(
+    points: torch.Tensor,
+    normals: torch.Tensor,
+    k0: int = 10,
+    k_min: float = 1.0,
+    kernel: Literal["wendland_c2", "biweight", "epanechnikov"] = "wendland_c2",
+) -> tuple[float, float]:
+    """The SAME (delta, tau) recommendation rule as
+    compute_recommended_params, applied to the geometry the oriented
+    estimator actually reads: delta = median of the k0-th
+    CO-ORIENTED (n_i . n_j > 0) neighbor distance, tau = 2 k_min /
+    (N C_eta delta). On a clean boundary co-oriented kNN equals
+    ordinary kNN, so this reproduces the position-only rule; on an
+    antiparallel wall it reads the own-sheet scale instead of the
+    doubled merged density (whose k0-NN distance under-sizes delta
+    and makes chi_tau fire on the sparse sheet -- the IIIc-0 cutoff
+    audit finding)."""
+    N = points.shape[0]
+    C_eta = KERNEL_CONSTANTS[kernel]
+    d = torch.cdist(points, points)
+    co = (normals @ normals.T) > 0
+    d = torch.where(co, d, torch.full_like(d, float("inf")))
+    d.fill_diagonal_(float("inf"))
+    k = min(k0, N - 1)
+    r_k0 = d.topk(k, dim=1, largest=False).values[:, -1]
+    finite = torch.isfinite(r_k0)
+    delta = float(r_k0[finite].median())
+    tau = 2 * k_min / (N * C_eta * delta)
+    return delta, tau
+
+
 def compute_per_point_bandwidths_knn(
     points: torch.Tensor,
     k: int = 10,
@@ -473,6 +504,155 @@ def compute_masses(
     masses = torch.where(chi > 0, chi / theta, torch.zeros_like(theta)) / N  # (N,)
 
     return masses
+
+
+def compute_kde_density_oriented(
+    points: torch.Tensor,
+    normals: torch.Tensor,
+    delta: float,
+    kernel: Literal["wendland_c2", "biweight", "epanechnikov"] = "wendland_c2",
+) -> torch.Tensor:
+    """Antipodal-sheet-aware KDE density (Phase IIIc-0).
+
+    theta^or_i = (1/(N C_eta delta)) sum_j eta(|x_i-x_j|/delta)
+                 * omega(n_i . n_j),   omega(s) = (1+s)/2.
+
+    SCOPE (stated, not incidental): this separates ANTIPARALLEL
+    coincident sheets -- the topology-change wall whose position-only
+    KDE left a count-ratio residual |N- - N+|/(N- + N+) in the
+    coherence (measured 0.225 vs the analytic 51/231 = 0.2208). It is
+    NOT a general oriented-multiplicity estimator: co-oriented
+    coincident sheets (omega(1) = 1) are out of scope. On a smooth
+    single sheet omega = 1 - O(kappa^2 delta^2), so the difference
+    from the position-only estimator is higher order. omega is
+    differentiable, threshold-free, and uses no labels or history.
+
+    Global scalar bandwidth only: per-point / adaptive modes are
+    rejected explicitly (no silent fallback).
+    """
+    N = points.shape[0]
+    C_eta = KERNEL_CONSTANTS[kernel]
+    kw = _oriented_kernel_omega(points, normals, delta, kernel)
+    return kw.sum(dim=1) / (N * C_eta * delta)
+
+
+def compute_masses_oriented(
+    points: torch.Tensor,
+    normals: torch.Tensor,
+    delta: float,
+    tau: float | torch.Tensor,
+    kernel: Literal["wendland_c2", "biweight", "epanechnikov"] = "wendland_c2",
+) -> torch.Tensor:
+    """Buet-Leonardi-Masnou masses with the antipodal-sheet-aware
+    density: m_i = (1/N) chi_tau(theta^or_i) / theta^or_i. See
+    compute_kde_density_oriented for scope and restrictions."""
+    N = points.shape[0]
+    theta = compute_kde_density_oriented(points, normals, delta,
+                                         kernel)
+    chi = chi_tau(theta, tau)
+    return torch.where(chi > 0, chi / theta,
+                       torch.zeros_like(theta)) / N
+
+
+def _oriented_kernel_omega(
+    points: torch.Tensor,
+    normals: torch.Tensor,
+    delta: float,
+    kernel: str,
+) -> torch.Tensor:
+    """(N, N) matrix eta(|x_i-x_j|/delta) * omega(n_i . n_j) shared by
+    the oriented density, its loopwise-masked variant, and the
+    self/cross split -- one implementation so the identity
+    theta^or = theta^self + theta^cross holds by construction."""
+    if isinstance(delta, torch.Tensor) and delta.dim() > 0:
+        raise NotImplementedError(
+            "oriented KDE supports a global scalar bandwidth only; "
+            "per-point/adaptive bandwidth paths must not silently "
+            "fall back")
+    diff = points.unsqueeze(1) - points.unsqueeze(0)
+    kernel_vals = _SafeKernelEval.apply(diff, delta, kernel)
+    omega = 0.5 * (1.0 + normals @ normals.T)
+    return kernel_vals * omega
+
+
+def compute_kde_density_oriented_loopwise(
+    points: torch.Tensor,
+    normals: torch.Tensor,
+    delta: float,
+    kernel: Literal["wendland_c2", "biweight", "epanechnikov"] = "wendland_c2",
+    loop_labels: torch.Tensor | None = None,
+) -> torch.Tensor:
+    """0K: loopwise-masked oriented density.
+
+    theta^loop_i = (1/(N C_eta delta)) sum_{j: l_j = l_i}
+                   eta(|x_i-x_j|/delta) omega(n_i . n_j)
+
+    with the GLOBAL N normalization (not N_l): under the standard
+    cutoff rule tau = 2 k_min / (N C_eta delta) the global N cancels
+    exactly in both chi_tau firing and the mass 1/(N theta), so each
+    loop's mass is invariant to the cardinality of the other loops
+    (reviewer 0K section 1). loop_labels are the SOURCE-frozen
+    certified boundary-loop labels; they are consumed as constants
+    (no gradient path through the mask), so within one MM step the
+    objective stays smooth. Scope: distinct certified loops --
+    same-loop self-contact is NOT separated by this mask (future
+    contact-complex work)."""
+    if loop_labels is None:
+        raise ValueError(
+            "loopwise oriented KDE requires explicit loop_labels "
+            "(source-frozen certified partition) -- no silent fallback")
+    N = points.shape[0]
+    C_eta = KERNEL_CONSTANTS[kernel]
+    kw = _oriented_kernel_omega(points, normals, delta, kernel)
+    same = (loop_labels.unsqueeze(1)
+            == loop_labels.unsqueeze(0)).to(kw.dtype)
+    return (kw * same).sum(dim=1) / (N * C_eta * delta)
+
+
+def compute_masses_oriented_loopwise(
+    points: torch.Tensor,
+    normals: torch.Tensor,
+    loop_labels: torch.Tensor,
+    delta: float,
+    tau: float | torch.Tensor,
+    kernel: Literal["wendland_c2", "biweight", "epanechnikov"] = "wendland_c2",
+) -> torch.Tensor:
+    """0K masses: m_i = (1/N) chi_tau(theta^loop_i)/theta^loop_i.
+
+    Guarantee (exact wording, reviewer 0K section 9): cross-loop
+    independence + sheetwise H^1 consistency -- each loop's raw mass
+    approximates ITS OWN arclength and is never attenuated by an
+    approaching antiparallel loop. sum_i m_i is NOT a conserved
+    quantity (loop perimeters move under the flow)."""
+    N = points.shape[0]
+    theta = compute_kde_density_oriented_loopwise(
+        points, normals, delta, kernel, loop_labels=loop_labels)
+    chi = chi_tau(theta, tau)
+    return torch.where(chi > 0, chi / theta,
+                       torch.zeros_like(theta)) / N
+
+
+def oriented_density_cross_split(
+    points: torch.Tensor,
+    normals: torch.Tensor,
+    delta: float,
+    kernel: Literal["wendland_c2", "biweight", "epanechnikov"] = "wendland_c2",
+    loop_labels: torch.Tensor | None = None,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """(theta^self, theta^cross) from ONE kernel-omega matrix, so
+    theta^or = theta^self + theta^cross holds to rounding. Telemetry /
+    0K-B decomposition helper (eq 4.1); callers pass detached inputs."""
+    if loop_labels is None:
+        raise ValueError("cross split requires loop_labels")
+    N = points.shape[0]
+    C_eta = KERNEL_CONSTANTS[kernel]
+    kw = _oriented_kernel_omega(points, normals, delta, kernel)
+    same = (loop_labels.unsqueeze(1)
+            == loop_labels.unsqueeze(0)).to(kw.dtype)
+    norm = N * C_eta * delta
+    theta_self = (kw * same).sum(dim=1) / norm
+    theta_cross = (kw * (1.0 - same)).sum(dim=1) / norm
+    return theta_self, theta_cross
 
 
 def compute_masses_uniform(

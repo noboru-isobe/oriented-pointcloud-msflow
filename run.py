@@ -121,6 +121,13 @@ def main():
                    type=int, default=None,
                    help="BEM collocation points per segment "
                         "(1=center only, 3=endpoints; default 3)")
+    p.add_argument("--bem-trace-side", dest="bem_trace_side",
+                   choices=["legacy_exterior", "interior"], default=None,
+                   help="single-layer jump relation. 'interior' is the correct "
+                        "trace for the one-phase interior Neumann problem; "
+                        "'legacy_exterior' (the MMConfig default) reproduces "
+                        "the published artifacts. "
+                        "See scripts/experiments/bem_static_tests.py")
     # --- output ---
     p.add_argument("--output", type=Path, default=None,
                    help="mp4 path; if omitted (or --no-video) just evolve")
@@ -138,6 +145,12 @@ def main():
 
     varifold = build_varifold(args, device, dtype)
     config = config_from_args(args)
+
+    # Always announce the trace side: while the default is deliberately the
+    # trace the static audits rejected, a silent run is a trap.
+    note = ("  <-- reproduces published artifacts; NOT the correct one-phase "
+            "interior trace" if config.bem_trace_side == "legacy_exterior" else "")
+    print(f"bem_trace_side={config.bem_trace_side}{note}")
     animator = VarifoldAnimator(varifold, config=config)
 
     make_video = (args.output is not None) and (not args.no_video)
