@@ -944,6 +944,12 @@ def build_config(args, delta, tau):
     cfg.redistribution_monotone_parts = getattr(args, "redist_monotone_parts",
                                                 "abc")
     cfg.perimeter_q_mode = args.q_mode
+    if getattr(args, "unit_q", False):
+        # q == 1 ablation: perimeter term = total weight (no
+        # visibility); the redistribution then uses unit weights
+        cfg.use_unit_coherence = True
+        cfg.perimeter_q_mode = "full"
+        cfg.redistribution_q_policy = "stale_full"
     if args.vertical:
         from src.torch.transport.carrier_amplitude import (
             CarrierAmplitudeConfig,
@@ -1577,6 +1583,9 @@ def main():
                          "fail-closed GUARD (inactive-RHS, incidence "
                          "certificates, eps_flux, pump signature, "
                          "shape stops) stays active and unchanged")
+    ap.add_argument("--unit-q", action="store_true",
+                    help="q == 1 ablation: perimeter term = total "
+                         "weight (no visibility)")
     ap.add_argument("--q-mode", default="full",
                     choices=("full", "loop_mean", "self_renormalized"),
                     help="0J: perimeter-energy coherence mode")

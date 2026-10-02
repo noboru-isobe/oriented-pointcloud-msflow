@@ -2467,6 +2467,10 @@ class MMStepper:
             else:
                 m = self._masses_for(pos, nor)
                 labels = self._certified_loop_labels(pos, nor, m)
+            if config.use_unit_coherence:
+                # q == 1 ablation: the energy is the total weight
+                # (consistent with the frozen perimeter of the step)
+                return float(m.sum())
             sigma = self._sigma if getattr(self, "_sigma", None) \
                 else config.perimeter_sigma
             from ..transport.bem_wasserstein import compute_coherence

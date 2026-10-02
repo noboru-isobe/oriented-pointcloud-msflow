@@ -2,7 +2,7 @@
 production stack (results/flower/flower_production.*).
 
 Top: snapshots (t = 0, 0.002, 0.006, 0.015, 0.04) colored by w_i q_i.
-Bottom: (a) visible perimeter, (b) circularity, (c) relative area error [%].
+Bottom: (a) perimeter term, (b) circularity, (c) relative area error [%].
 Output: results/reports/figs/flower_production.pdf (+ numbers json).
 """
 from __future__ import annotations
@@ -50,19 +50,19 @@ def main():
     cb = fig.colorbar(sc, cax=cax)
     cb.set_label(r"$w_i q_i$")
     ax = fig.add_subplot(gs[0, 0])
-    ax.plot(t, P, color="tab:blue", lw=1.0)
+    ax.plot(t, P, color="#0072B2", lw=1.0)
     ax.axhline(2 * np.pi * R_eq, color="0.4", ls="--", lw=0.8)
     ax.set_xlabel("$t$")
-    ax.set_ylabel(r"$\widehat P(t)$")
-    ax.set_title("(a) visible perimeter")
+    ax.set_ylabel(r"$\widehat P^{\,n}$")
+    ax.set_title("(a) perimeter term")
     ax = fig.add_subplot(gs[0, 1])
-    ax.plot(t, c, color="tab:green", lw=1.0)
+    ax.plot(t, c, color="#009E73", lw=1.0)
     ax.axhline(1.0, color="0.4", ls="--", lw=0.8)
     ax.set_xlabel("$t$")
-    ax.set_ylabel(r"$4\pi A/\widehat P^{\,2}$")
+    ax.set_ylabel(r"$4\pi A/(\widehat P^{\,n})^{2}$")
     ax.set_title("(b) circularity")
     ax = fig.add_subplot(gs[0, 2])
-    ax.plot(t, (A - A[0]) / A[0] * 100, color="tab:red", lw=1.0)
+    ax.plot(t, (A - A[0]) / A[0] * 100, color="#D55E00", lw=1.0)
     ax.set_xlabel("$t$")
     ax.set_ylabel(r"relative area error [\%]")
     ax.set_title("(c) area conservation")

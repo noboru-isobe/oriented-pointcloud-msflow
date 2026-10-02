@@ -82,7 +82,7 @@ def main():
     ell = torch.load(ELL, weights_only=True)
     ann = torch.load(ANN, weights_only=True)
     fig, axs = plt.subplots(1, 4, figsize=(7.0, 2.05))
-    c_left, c_right, c_new = "tab:blue", "tab:green", "tab:red"
+    c_left, c_right, c_new = "#0072B2", "#009E73", "#D55E00"
 
     # (i) contact region at the switch of the visibility
     st = ell[_nearest(ell, STEPS['switch'])]

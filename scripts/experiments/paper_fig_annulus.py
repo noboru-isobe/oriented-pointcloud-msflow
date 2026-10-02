@@ -102,9 +102,9 @@ def main():
     # (a) radii vs exact ODE
     ax = fig.add_subplot(gs[:, 0:2])
     Ro_ex, Rh_ex = exact_radii(t)
-    ax.plot(t, Ro, color="tab:blue", lw=1.2, label=r"$R_{\textup{outer}}$")
-    ax.plot(t, Rh, color="tab:orange", lw=1.2, label=r"$R_{\textup{hole}}$")
-    ax.plot(t, Rd, color="tab:green", lw=1.2, label=r"$R_{\textup{disk}}$")
+    ax.plot(t, Ro, color="#0072B2", lw=1.2, label=r"$R_{\textup{outer}}$")
+    ax.plot(t, Rh, color="#E69F00", lw=1.2, label=r"$R_{\textup{hole}}$")
+    ax.plot(t, Rd, color="#009E73", lw=1.2, label=r"$R_{\textup{disk}}$")
     m = t <= T_C
     ax.plot(t[m], Ro_ex[m], "k:", lw=0.9, label="exact ODE")
     ax.plot(t[m], Rh_ex[m], "k:", lw=0.9)
@@ -118,25 +118,28 @@ def main():
 
     # (b) perimeter with the event times
     ax = fig.add_subplot(gs[:, 2:4])
-    ax.plot(t, P, color="tab:blue", lw=1.0)
-    ax.set_ylabel(r"$\widehat P(t)$")
+    ax.plot(t, P, color="#0072B2", lw=1.0)
+    ax.set_ylabel(r"$\widehat P^{\,n}$")
     ax.set_xlabel("$t$")
     ylim = ax.get_ylim()
     for j, (k, lab) in enumerate(EVENTS):
         ax.axvline(k * DT, color="0.5", ls=":", lw=0.8)
-        top = (j % 2 == 0)
-        ax.text(k * DT, ylim[1] if top else ylim[0], lab, rotation=90,
-                va="top" if top else "bottom", ha="right", fontsize=6)
+        if j == 1:
+            # t_1 and t_2 are two steps apart and coincide at this scale:
+            # only t_1 is labelled (the caption states the coincidence)
+            continue
+        ax.text(k * DT, ylim[1], lab, rotation=90, va="top", ha="right",
+                fontsize=6)
     ax.axvline(T_C, color="0.2", lw=0.8)
     ax.text(T_C, 0.5 * (ylim[0] + ylim[1]), r"$T_c$", va="center", ha="left",
             fontsize=6)
-    ax.set_title("(b) perimeter and event times")
+    ax.set_title("(b) perimeter term and event times")
 
     # (c) area conservation
     ax = fig.add_subplot(gs[:, 4:6])
-    ax.plot(t, (V - V[0]) / V[0] * 100, color="tab:red", lw=1.0)
+    ax.plot(t, (V - V[0]) / V[0] * 100, color="#D55E00", lw=1.0)
     ax.set_ylabel(r"relative area error [\%]")
-    ax.ticklabel_format(axis="y", style="sci", scilimits=(-2, 2))
+    ax.ticklabel_format(axis="y", style="plain", useOffset=False)
     ax.set_xlabel("$t$")
     for k, lab in EVENTS:
         ax.axvline(k * DT, color="0.5", ls=":", lw=0.8)

@@ -73,15 +73,52 @@ def ellipse_perimeter(a, b, n=200000):
                  .mul(2 * math.pi / n)[:-1].sum())
 
 
+def derived_order(pos):
+    """Cyclic order of ONE loop derived from its geometry (centroid-
+    angle sort with the fail-closed certificates of
+    certify_loop_orders). The order in which the particles are stored
+    is never read: every polygon functional below sorts by this first,
+    so the driver is equivariant under permutations inside a loop."""
+    from src.torch.perimeter.contact_complex import certify_loop_orders
+    lab = torch.zeros(pos.shape[0], dtype=torch.long)
+    return certify_loop_orders(pos, lab)[0]["index"]
+
+
 def signed_area_order(pos):
-    """Shoelace in the GIVEN (curve) order -- exact regardless of
-    star-shapedness (particle order is preserved by the flow)."""
+    """Shoelace of ONE loop in the derived cyclic order (counter-
+    clockwise, hence positive)."""
+    pos = pos[derived_order(pos)]
     x, y = pos[:, 0], pos[:, 1]
     x2, y2 = torch.roll(x, -1, 0), torch.roll(y, -1, 0)
     return float(0.5 * (x * y2 - x2 * y).sum())
 
 
+def current_area_moment(pos, nor, m):
+    """Order-free area and first moment of a set of loops from the
+    boundary integrals |E| = 1/2 int x.n and int_E x = 1/2 int |x|^2 n
+    with the particle masses as quadrature weights (the quantities
+    reported in the paper). Returns (A, (Mx, My))."""
+    A = float(0.5 * (m * (pos * nor).sum(-1)).sum())
+    M = 0.5 * ((m * (pos * pos).sum(-1))[:, None] * nor).sum(0)
+    return A, (float(M[0]), float(M[1]))
+
+
+def centered_barycenter(pos, nor, m, n_iter=6):
+    """Order-free barycenter of a set of loops, invariant under
+    translations: fixed point of c = c + 1/(2 A_c) sum w |x - c|^2 u
+    with A_c = 1/2 sum w (x - c).u (the boundary integrals of
+    current_area_moment about c). The origin-based M / A carries the
+    area error times the distance of the barycenter from the origin."""
+    c = pos.mean(dim=0)
+    for _ in range(n_iter):
+        d = pos - c
+        A, M = current_area_moment(d, nor, m)
+        c = c + torch.tensor(M, dtype=pos.dtype) / A
+    return (float(c[0]), float(c[1]))
+
+
 def centroid_order(pos):
+    pos = pos[derived_order(pos)]
     x, y = pos[:, 0], pos[:, 1]
     x2, y2 = torch.roll(x, -1, 0), torch.roll(y, -1, 0)
     cr = x * y2 - x2 * y
@@ -175,6 +212,7 @@ def activation_gap_ratio(pos, labels, probe_res):
 
 
 def polygon_moments_order(pos):
+    pos = pos[derived_order(pos)]
     x, y = pos[:, 0], pos[:, 1]
     x2, y2 = torch.roll(x, -1, 0), torch.roll(y, -1, 0)
     cr = x * y2 - x2 * y
@@ -422,6 +460,57 @@ def resolve_m(pos, nor, delta, tau):
         pos, nor, delta, tau).m_loop
 
 
+def certified_splice(posS, angS, m1, delta, tau, thr, cut_gap):
+    """Reconnection of two loops at a certified local contact, as a
+    function of the SOURCE STATE only. The order of the particles
+    along the two loops is derived from the geometry
+    (derived_loop_permutation) -- the order in which they are stored is
+    never read. Returns (splice record or None, error or None, source
+    positions, source angles), the source in the derived order."""
+    from l1_quotient_shadow import window_certificate
+    from src.torch.perimeter.contact_complex import (
+        derived_loop_permutation,
+    )
+    from src.torch.solver.arc_splice import ArcSpliceError, arc_splice
+    labels = (~m1).long()
+    permS = derived_loop_permutation(posS, labels)
+    posS, angS = posS[permS], angS[permS]
+    norS = torch.stack([angS.cos(), angS.sin()], 1)
+    mS = resolve_m(posS, norS, delta, tau)
+    # L1 certificate on the calibrated 1.5h window (hard)
+    w_rec, w_ok, w_fail = window_certificate(posS, angS, m1, delta,
+                                             tau, thr)
+    # cut window: 2 eps_fill = 0.08 on the grid backend (the
+    # grid-bridging-safe scale); the same absolute width (about
+    # 3.3 ell) is kept on the BIE backend so the reconnection geometry
+    # is unchanged
+    D = torch.cdist(posS[m1], posS[~m1])
+
+    def cyc(w, base):
+        idx = w.nonzero().flatten()
+        nn = w.shape[0]
+        st_ = [int(i) for i in idx
+               if not bool(w[(int(i) - 1) % nn])]
+        if len(st_) != 1:
+            return None
+        return base + torch.tensor(
+            [(st_[0] + k) % nn for k in range(int(w.sum()))],
+            dtype=torch.long)
+    w1 = cyc(D.min(dim=1).values <= cut_gap, 0)
+    w2 = cyc(D.min(dim=0).values <= cut_gap, int(m1.sum()))
+    if not w_ok or w1 is None or w2 is None:
+        return None, f"window not certified ({w_fail})", posS, angS
+    h_ab = max(float(mS[m1].median()), float(mS[~m1].median()))
+    try:
+        sp = arc_splice(posS, angS, labels, w1, w2, h_ab)
+    except ArcSpliceError as e:
+        return None, f"ArcSpliceError: {e}", posS, angS
+    if not sp["certified"]:
+        return (None, f"S0 certificates failed: {sp['certificates']}",
+                posS, angS)
+    return sp, None, posS, angS
+
+
 def geometry_pins(v, m1, n_el, L_ell, delta, tau, rotate_deg):
     """L0-0: initial sampling / geometry pins (printed AND asserted at
     O(h^2)-scale tolerances; h ~ 0.0245)."""
@@ -430,7 +519,8 @@ def geometry_pins(v, m1, n_el, L_ell, delta, tau, rotate_deg):
     g_min = float(torch.cdist(p1, p2).min())
     A1, A2 = signed_area_order(p1), signed_area_order(p2)
     b1, b2 = centroid_order(p1), centroid_order(p2)
-    seg1 = (torch.roll(p1, -1, 0) - p1).norm(dim=1)
+    p1o = p1[derived_order(p1)]
+    seg1 = (torch.roll(p1o, -1, 0) - p1o).norm(dim=1)
     cv = float(seg1.max() / seg1.min())
     m = resolve_m(pos, v.normals, delta, tau)
     h_med = float(m.median())
@@ -471,15 +561,17 @@ def window_telemetry(pos, nor, m, m1, q_full, q_self, q_wb, gamma):
     w1 = g1 <= gamma * h_ab
     w2 = g2 <= gamma * h_ab
     out["n_W"] = (int(w1.sum()), int(w2.sum()))
-    out["runs_W"] = (cyclic_runs(w1), cyclic_runs(w2))
+    # cyclic quantities in the DERIVED order of each loop
+    o1, o2 = derived_order(p1), derived_order(p2)
+    out["runs_W"] = (cyclic_runs(w1[o1]), cyclic_runs(w2[o2]))
     Wm = torch.zeros(pos.shape[0], dtype=torch.bool)
     Wm[m1.nonzero().flatten()[w1]] = True
     Wm[(~m1).nonzero().flatten()[w2]] = True
     out["_W_mask"] = Wm            # stripped before JSON
     i_min = int(g1.argmin())
     j_min = int(j1[i_min])
-    k1 = curvature_at(p1, i_min)
-    k2 = curvature_at(p2, j_min)
+    k1 = curvature_at(p1[o1], int((o1 == i_min).nonzero()[0]))
+    k2 = curvature_at(p2[o2], int((o2 == j_min).nonzero()[0]))
     out["kappa_sum"] = abs(k1) + abs(k2)
     if int(w1.sum()) >= 2 and int(w2.sum()) >= 2:
         idx = torch.zeros(pos.shape[0], dtype=torch.bool)
@@ -569,9 +661,21 @@ def main():
                          "aggregation; reviewer 2026-08-25). polygon "
                          "= historical bitwise baseline (library "
                          "MMConfig default stays polygon).")
+    ap.add_argument("--unit-q", action="store_true",
+                    help="q == 1 ablation: the perimeter term is the "
+                         "total weight sum_i w_i (no visibility); no "
+                         "visibility switch t1, the merge / quotient "
+                         "and the reconnection keep their geometric "
+                         "triggers and gates, all arms use the same "
+                         "unit-q configuration")
     ap.add_argument("--first-moment-rows", action="store_true",
                     help="L0J-M: exact polygon first-moment rows in "
                          "the admissible basis")
+    ap.add_argument("--shuffle-seed", type=int, default=None,
+                    help="order-independence check: store the "
+                         "particles of each loop of the starting state "
+                         "in a random order (the run must not depend "
+                         "on it)")
     args = ap.parse_args()
     torch.set_default_dtype(DT)
     OUT.mkdir(parents=True, exist_ok=True)
@@ -597,13 +701,32 @@ def main():
         pins = {"resumed_from": src, "step": args.resume}
         print(f"resuming from step {args.resume} (states of "
               f"{src!r}, N={v0.n_points})", flush=True)
-    else:
+    if args.shuffle_seed is not None:
+        # random storage order inside each loop (loop 0 stays first);
+        # the checkpointed activation/quotient states carry no
+        # per-particle indices, so a resumed state can be shuffled too
+        assert v0.n_points == m1.shape[0], \
+            "--shuffle-seed needs a two-loop starting state"
+        gsh = torch.Generator().manual_seed(args.shuffle_seed)
+        n0 = int(m1.sum())
+        psh = torch.cat([torch.randperm(n0, generator=gsh),
+                         n0 + torch.randperm(v0.n_points - n0,
+                                             generator=gsh)])
+        v0 = OrientedPointCloudVarifold(
+            positions=v0.positions[psh].clone(),
+            angles=v0.angles[psh].clone())
+        print(f"storage order shuffled inside each loop (seed "
+              f"{args.shuffle_seed})", flush=True)
+    if args.resume is None:
         pins = geometry_pins(v0, m1, n_el, L_ell, delta, tau,
                              args.rotate_deg)
     if args.pins_only:
         return
-    q_mode_now = args.q_mode
+    q_mode_now = "full" if args.unit_q else args.q_mode
     resumed_activation = None
+    if args.unit_q:
+        assert args.activation == "off", \
+            "--unit-q has no visibility, hence no WB->CC switch"
     if args.activation == "wbcc":
         assert args.first_moment_rows, \
             "--activation wbcc requires --first-moment-rows (the rows " \
@@ -654,12 +777,16 @@ def main():
         c.time_step = args.dt
         c.grid_bulk_first_moment_rows = args.first_moment_rows
         c.grid_bulk_first_moment_rows_form = args.moment_rows_form
+        if args.unit_q:
+            c.use_unit_coherence = True
+            c.perimeter_q_mode = "full"
+            c.redistribution_q_policy = "stale_full"
         return c
 
     cfg = make_cfg(q_mode_now)
     print(f"L0: one-phase interior MS, N={v0.n_points} "
           f"(2 x {n_el} arc-length), H={args.grid}, dt={args.dt:g}, "
-          f"rot={args.rotate_deg} deg, q_mode={args.q_mode}, "
+          f"rot={args.rotate_deg} deg, q_mode={q_mode_now}, unit_q={args.unit_q}, "
           f"R_eq check {R_EQ:.6f}", flush=True)
     labels = (~m1).long()          # static: order/count never change
     # conservation baseline = the DISCRETE t=0 areas (the analytic
@@ -702,7 +829,8 @@ def main():
             meta=dict(a=A_EL, b=B_EL, gap=GAP, n_el=n_el,
                       N=v0.n_points, grid=args.grid, dt=args.dt,
                       metric=args.metric, bridge_gap=args.bridge_gap,
-                      cut_gap=args.cut_gap,
+                      cut_gap=args.cut_gap, unit_q=args.unit_q,
+                      shuffle_seed=args.shuffle_seed,
                       rotate_deg=args.rotate_deg,
                       gamma_window=args.gamma_window, pins=pins,
                       model="one-phase interior MS: Delta u=0 per "
@@ -757,6 +885,14 @@ def main():
         p1, p2 = pos[m1], pos[~m1]
         A = (signed_area_order(p1), signed_area_order(p2))
         bar = (centroid_order(p1), centroid_order(p2))
+        # order-free area and barycenter of each loop (the quantities
+        # reported in the paper)
+        cur = [current_area_moment(pos[s], nor[s], m[s])
+               for s in (m1, ~m1)]
+        A_cur = [c[0] for c in cur]
+        bar_cur = [(c[1][0] / c[0], c[1][1] / c[0]) for c in cur]
+        bar_cen = [centered_barycenter(pos[s], nor[s], m[s])
+                   for s in (m1, ~m1)]
         win = window_telemetry(pos, nor, m, m1, q_full, q_self, q_wb,
                                args.gamma_window)
         W_mask = win.pop("_W_mask", None)
@@ -977,7 +1113,9 @@ def main():
         rec = dict(step=step, t=(step + 1) * args.dt,
                    P_frozen=float(res.perimeter),
                    W=float(res.wasserstein), n_iter=int(res.n_iter),
-                   A=A, bar=bar, r_l=r, cross_max=cross_max,
+                   A=A, bar=bar, A_cur=A_cur, bar_cur=bar_cur,
+                   bar_cen=bar_cen,
+                   r_l=r, cross_max=cross_max,
                    dA_rel=[(A[j] - A0[j]) / A0[j] for j in (0, 1)],
                    dbar=[math.hypot(bar[j][0] - bar0[j][0],
                                     bar[j][1] - bar0[j][1])
@@ -1035,7 +1173,8 @@ def main():
                     f"{args.stop_after_activation} steps "
                     "(L-A2 smoke window complete)")
         elif (args.auto_quotient
-              and state.get("activated_at") is not None
+              and (state.get("activated_at") is not None
+                   or args.unit_q)
               and state.get("_quotient_state") is None
               and state.get("_quot_candidate") is None
               and ((win["g_min"] <= 0.0336) if args.metric == "grid"
@@ -1157,7 +1296,8 @@ def main():
             positions=posQ.clone(), angles=angQ.clone())
         arms = {}
         for arm in ("keep", "drop"):
-            cfgQ = make_cfg("contact_complex_renormalized")
+            cfgQ = make_cfg("full" if args.unit_q
+                            else "contact_complex_renormalized")
             svQ = MMSolver(cfgQ)
             stQ = MMStepper(cfgQ)
             stQ._grid_target_volume_initial = state["_target0"]
@@ -1256,51 +1396,18 @@ def main():
         committed state step_n (zero-time; S0 event gates hard,
         fail-closed) followed by the single-loop continuation up to
         --steps, all in THIS process/series."""
-        from l1_quotient_shadow import window_certificate
         from src.torch.solver.arc_splice import (
-            ArcSpliceError,
             _has_self_intersection,
             _polygon_A_M,
-            arc_splice,
         )
         posS, angS = state.pop("_splice_source")
         thr = json.loads(Path(
             "results/two_ellipses/l1_calibration/l1_thresholds.json"
         ).read_text())
-        norS = torch.stack([angS.cos(), angS.sin()], 1)
-        mS = resolve_m(posS, norS, delta, tau)
-        # L1 certificate on the calibrated 1.5h window (hard)
-        w_rec, w_ok, w_fail = window_certificate(posS, angS, m1,
-                                                 delta, tau, thr)
-        # cut window: 2 eps_fill = 0.08 on the grid backend (the
-        # grid-bridging-safe scale); the same width (3.2 ell) is kept
-        # on the BIE backend so the reconnection geometry is unchanged
-        CUT_GAP = float(args.cut_gap)
-        D = torch.cdist(posS[m1], posS[~m1])
-
-        def cyc(w, base):
-            idx = w.nonzero().flatten()
-            nn = w.shape[0]
-            st_ = [int(i) for i in idx
-                   if not bool(w[(int(i) - 1) % nn])]
-            if len(st_) != 1:
-                return None
-            return base + torch.tensor(
-                [(st_[0] + k) % nn for k in range(int(w.sum()))],
-                dtype=torch.long)
-        w1 = cyc(D.min(dim=1).values <= CUT_GAP, 0)
-        w2 = cyc(D.min(dim=0).values <= CUT_GAP, int(m1.sum()))
-        if not w_ok or w1 is None or w2 is None:
-            return (f"auto-splice: window not certified at {step_n} "
-                    f"({w_fail})")
-        h_ab = max(float(mS[m1].median()), float(mS[~m1].median()))
-        try:
-            sp = arc_splice(posS, angS, labels, w1, w2, h_ab)
-        except ArcSpliceError as e:
-            return f"auto-splice ArcSpliceError at {step_n}: {e}"
-        if not sp["certified"]:
-            return (f"auto-splice S0 certificates failed at {step_n}:"
-                    f" {sp['certificates']}")
+        sp, sp_err, posS, angS = certified_splice(
+            posS, angS, m1, delta, tau, thr, float(args.cut_gap))
+        if sp_err is not None:
+            return f"auto-splice: {sp_err} at {step_n}"
         Xs, ANs = sp.pop("positions"), sp.pop("angles")
         sp.pop("provenance")
         state["spliced_at"] = int(step_n)
@@ -1314,7 +1421,7 @@ def main():
               f"(N {posS.shape[0]} -> {Xs.shape[0]}, corr residual "
               f"{sp['corr_residual']}) ==", flush=True)
         # ---- single-loop continuation ---------------------------
-        cfg1 = make_cfg("self_renormalized")
+        cfg1 = make_cfg("full" if args.unit_q else "self_renormalized")
         sv = MMSolver(cfg1)
         if state.get("_target0") is not None:
             sv._pending_target_volume = state["_target0"]
@@ -1331,12 +1438,24 @@ def main():
             c = (Mxq / Aq, Myq / Aq)
             r = (pp - torch.tensor(c)).norm(dim=1)
             L = float((pp.roll(-1, 0) - pp).norm(dim=1).sum())
+            # order-free area, barycenter, circularity and mean radius
+            # (the quantities reported in the paper); the polygon
+            # values above use the order produced by the splice
+            mq = resolve_m(pp, vv.normals, delta, tau)
+            Ac, Mc = current_area_moment(pp, vv.normals, mq)
+            bc = (Mc[0] / Ac, Mc[1] / Ac)
+            bcen = centered_barycenter(pp, vv.normals, mq)
+            rc = (pp - torch.tensor(bc, dtype=pp.dtype)).norm(dim=1)
             rec = dict(step=gstep, t=(gstep + 1) * args.dt,
                        phase="single_loop", A=Aq,
                        dA_rel=(Aq - A0s) / A0s, bar=c, L=L,
                        isoperimetric=4 * math.pi * Aq / L ** 2,
                        r_mean=float(r.mean()), r_std=float(r.std()),
                        r_mean_over_req=float(r.mean()) / R_EQ,
+                       A_cur=Ac, bar_cur=bc, bar_cen=bcen,
+                       circ=4 * math.pi * Ac / float(res.perimeter) ** 2,
+                       r_mean_cur=float(rc.mean()),
+                       r_mean_cur_over_req=float(rc.mean()) / R_EQ,
                        P_frozen=float(res.perimeter),
                        W=float(res.wasserstein),
                        n_iter=int(res.n_iter),
@@ -1403,9 +1522,11 @@ def main():
                 raise
         return seg_err
 
-    if args.activation != "wbcc":
+    if args.activation != "wbcc" and not args.unit_q:
         err = _segment(v0)
     else:
+        # (the unit-q ablation has no activation but uses the same
+        # segmented controller for the quotient and the splice)
         # L-A segmented controller: WB probe -> transaction ->
         # zero-time CC commit (t_act = n, X^n unchanged, first CC
         # physical step = n+1)

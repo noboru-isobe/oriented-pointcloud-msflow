@@ -1,9 +1,9 @@
 # Mullins–Sekerka flow via oriented point cloud varifolds
 
-Code and data for the paper *Mullins–Sekerka flow as the Wasserstein gradient
-flow of the perimeter on oriented point cloud varifolds* (N. Isobe, 2026,
-submitted). This is a snapshot of the private development repository; the
-history of the experiments is not included.
+Code and data for the paper *Oriented point-cloud varifolds for estimating the
+perimeter and computing its Wasserstein gradient flow* (T. Eto and N. Isobe,
+2026). This is a snapshot of the private development repository. The history
+of the experiments is not included.
 
 <table>
 <tr>
@@ -11,8 +11,8 @@ history of the experiments is not included.
   <th align="center">Concentric disk and annulus (exact solution up to contact)</th>
 </tr>
 <tr>
-<td><img src="results/reports/figs/two_ellipses_merger_bie.png" width="100%"></td>
-<td><img src="results/reports/figs/annulus_merger_bie.png" width="100%"></td>
+<td><img src="results/reports/figs/two_ellipses_merger_bie2_v2.png" width="100%"></td>
+<td><img src="results/reports/figs/annulus_merger_bie_v2.png" width="100%"></td>
 </tr>
 </table>
 
@@ -24,16 +24,18 @@ minimizes
     P̂(s) + Ŵ_h(s)
 
 over normal displacements `s`, where `P̂` is the visible perimeter of the
-oriented point cloud (particle masses estimated from the cloud, weighted by a
-coherence factor `q_i` in `[0, 1]` that vanishes where opposite normals
-cancel) and `Ŵ_h` is the linearized Wasserstein term, evaluated by a boundary
+oriented point cloud (particle masses estimated from the cloud, weighted by
+the visibility `q_i` in `[0, 1]`, which vanishes where opposite normals
+cancel; the code calls it `coherence`) and `Ŵ_h` is the linearized Wasserstein term, evaluated by a boundary
 integral method (single-layer representation of the interior Neumann problem,
 three collocation points per particle, one dense block per connected
 component). Area and first-moment constraints are imposed through an
 orthogonal basis of their complement, the points are redistributed
-tangentially after each step, and topological changes (contact of two
-components, removal of the cancelled arcs, reconnection into one loop) are
-handled by rules stated in the paper's Appendix A.
+tangentially after each step, and topological changes are carried out by the
+four events of the paper's Appendix A (switch of the visibility, merging of
+the constraints, removal of the canceling pair, reconnection of the arcs).
+The table at the end of this file relates the symbols and names of the paper
+to the names and values in the code.
 
 ## Installation
 
@@ -47,9 +49,9 @@ the dense backend and float64 on the CPU.
 
 ## Reproducing the computations of the paper
 
-The three production runs of Section 6 (each writes `results/<dir>/*_bie.json`
-and a `*_bie_states.pt` file with the stored states; about 0.8–1.3 s per step
-on 8 cores):
+The three production runs of Section 6 (each writes `results/<dir>/*<tag>.json`
+and a `*<tag>_states.pt` file with the states stored every 25 steps; about
+0.8–1.4 s per step on 8 cores):
 
 ```bash
 # flower (N = 291, 4000 steps)
@@ -58,7 +60,7 @@ uv run python scripts/experiments/flower_production.py --steps 4000 --metric bie
 # two ellipses (N = 376, 4400 steps): switch, contact, reconnection, relaxation
 uv run python scripts/experiments/two_ellipses_benchmark.py \
     --steps 4400 --metric bie --activation wbcc --auto-quotient --auto-splice \
-    --first-moment-rows --tag _bie
+    --first-moment-rows --tag _bie2
 
 # concentric disk + annulus (N = 487, 2400 steps): exact ODE until contact, exact equilibrium after
 uv run python scripts/experiments/exact_merger_benchmark.py \
@@ -70,20 +72,41 @@ uv run python scripts/experiments/exact_merger_benchmark.py \
     --redist-monotone --contact-rows-mode aligned_prequotient --tag _bie
 ```
 
-`scripts/experiments/bie_vm_runs.sh` launches the three runs in parallel.
 The stored outputs of these runs are committed under `results/flower`,
-`results/two_ellipses` (also a run with the initial data rotated by 22.5°,
-tag `_bie_rot22`) and `results/exact_merger`.
+`results/two_ellipses` and `results/exact_merger`. The flower and annulus
+results (tag `_bie`) were produced by `scripts/experiments/bie_vm_runs.sh`
+before the present snapshot. The two-ellipses results of the
+paper (tag `_bie2`) were produced by
+`scripts/experiments/order_free_vm_runs.sh` with the present code, in which
+the order of the particles along a loop, where an event needs it, is derived
+from the state and never read from the storage order. That script also runs
+the same computation with the particles of each loop stored in a random order
+(`--shuffle-seed 1`, tag `_bie2_shuffle`): the events take place at the same
+steps (1431, 2025, 2029) and the reported quantities agree to the digits
+quoted in the paper. The two runs differ by about 1e-6 in the perimeter term
+before the reconnection and 2e-4 after it, which is also the size of the
+difference between two runs with the same storage order (`_bie` and `_bie2`),
+because the number of iterations of the minimization at single steps is
+sensitive to rounding. `results/two_ellipses` also keeps the earlier run
+`_bie` (the event schematic of the paper was drawn from its states) and a run
+with the initial data rotated by 22.5° (tag `_bie_rot22`).
 
-Figures of the paper (`results/reports/figs/*_bie.pdf`, the `*_numbers.json`
-files next to them hold the numbers quoted in the text):
+Figures of the paper (`results/reports/figs/`, the `*_numbers.json` files next
+to them hold the numbers quoted in the text):
 
 ```bash
-uv run python scripts/experiments/paper_fig_flower.py       --run flower_production_bie   --out flower_production_bie
-uv run python scripts/experiments/paper_fig_two_ellipses.py --run two_ellipses_bie        --out two_ellipses_merger_bie
-uv run python scripts/experiments/paper_fig_annulus.py      --run exact_merger_bie        --out annulus_merger_bie
+uv run python scripts/experiments/paper_fig_flower.py       --run flower_production_bie   --out flower_production_bie_v2
+uv run python scripts/experiments/paper_fig_two_ellipses.py --run two_ellipses_bie2       --out two_ellipses_merger_bie2_v2
+uv run python scripts/experiments/paper_fig_annulus.py      --run exact_merger_bie        --out annulus_merger_bie_v2
 uv run python scripts/experiments/paper_fig_events.py       --ell-run two_ellipses_bie --ann-run exact_merger_bie --out events_schematic_bie
 ```
+
+The area, the barycenter and the circularity reported for the two ellipses are
+the order-free quantities defined in Section 6.2 of the paper (series keys
+`A_cur`, `circ`, `r_mean_cur`; the barycenter is `centered_barycenter` in
+`two_ellipses_benchmark.py`). The keys `A`, `bar`, `isoperimetric` hold the
+area, centroid and isoperimetric ratio of the polygon through the particles,
+which the earlier figures (`*_bie.pdf`) showed.
 
 Verification of the boundary integral metric (`results/bie_metric`,
 `results/reports/bie_*.json`, summary in `results/reports/bie_metric_report.md`):
@@ -140,6 +163,61 @@ development of the method (grid Poisson metric, calibrations, earlier
 benchmarks); they are kept so that the tests run and the reported
 comparisons can be repeated. The drivers used for the paper are the three
 listed above.
+
+## Correspondence between the paper and the code
+
+Names. The code keeps the working names of the development.
+
+| Paper | Code |
+|---|---|
+| visibility `q` | `coherence` |
+| `q^loop` (renormalization loop by loop) | `--q-mode self_renormalized`, "WB" |
+| `q^arc` (renormalization arc by arc) | `contact_complex_renormalized`, "CC" |
+| (i) switch of the visibility | `--activation wbcc`, "activation" |
+| (ii) merging of the constraints | `--auto-quotient` (two ellipses), `--quotient-mode certificate_shadow` (annulus), "quotient" |
+| (iii) removal of the canceling pair | `--endgame --compression atomic`, `ghost_compression.py`, "compression" |
+| (iv) reconnection of the arcs | `--auto-splice`, `arc_splice.py`, "splice" |
+| criterion of an event | "certificate" |
+| auxiliary step and its tolerances | "shadow" step, "gates" |
+| particles held fixed | "masked", "frozen" |
+
+Parameters and thresholds (all fixed before the reported runs).
+
+| Paper | Value | Where |
+|---|---|---|
+| mollifier scale σ | 0.1 | `SIGMA`, `scripts/experiments/p1_production_comparison.py` |
+| time step h | 1e-5 | `--dt` of the drivers |
+| density bandwidth δ, truncation τ (A.1) | median 10th-neighbor distance, 2ψ(0)/(N Z δ), once from the initial cloud | `compute_recommended_params`, `src/torch/oriented_varifold/mass.py` |
+| kernel regularization ε_reg | 0.15 ℓ | `BIEMetricConfig.epsilon_scale`, `src/torch/transport/bie_wasserstein.py` |
+| components joined by the metric | gap ≤ ℓ | `bridge_gap_over_ell = 1.0` |
+| particles held fixed | partner within 1.5 ℓ, `u_i·u_j ≤ -0.9` | `mask_gap_over_ell`, `anti_parallel_tol` |
+| monitors of the metric | 1e-6, 1e-6, 0.1 | `sigma_tail_min`, `definiteness_tol`, `compat_reject_tol` |
+| minimization | trust-region Newton CG, gradient tolerance 1e-8, at most 300 iterations | `make_cfg`, `p1_production_comparison.py` |
+| redistribution: δ_red, h_red | 0.5 δ, 0.01 | `redistribute_delta_ratio`, `redistribute_step_size` in `MMConfig` (`src/torch/solver/mm_step.py`) |
+| redistribution: tolerance, iterations, bound | 1e-4 (coefficient of variation of θ^red per loop), at most 10 per step, 0.05 δ_red, scalings 2^-k with k ≤ 7 | `redistribute_tol`, `redistribute_n_iters`, `redistribute_max_disp_ratio`, `src/torch/solver/redistribution_rules.py` |
+| winding numbers | regularization ℓ²/4, 8 points at depths 1.5, 2.5, 4 ℓ, margin 0.15 | `EPS_WIND`, `src/torch/transport/incidence.py` |
+| (i) threshold of the switch | gap ≤ 0.55 σ, one pair of arcs with at least 3 particles | `ACT_GAP_OVER_SIGMA`, `two_ellipses_benchmark.py` |
+| (i) tolerances of the auxiliary step | 1.796e-7 (areas), 1.709e-7 (first moments) | `EPS_A_FLOOR`, `EPS_M_FLOOR` |
+| (ii) criterion, two ellipses | contact region within 1.5 ℓ; anti-parallelism ≤ 0.0507, mass balance ≤ 0.05, tapered current ≤ 0.0338 | `results/two_ellipses/l1_calibration/l1_thresholds.json`, `window_certificate` in `scripts/experiments/l1_quotient_shadow.py` |
+| (ii) criterion, annulus | 90th-percentile gap / ℓ ≤ 1.256, mass fraction within 1.5 ℓ ≥ 0.628, anti-parallelism ≤ 0.0446, mass balance ≤ 0.0649, current residual ≤ 0.0474 | `ContactThresholds`, `src/torch/transport/contact_certificate.py` |
+| (ii) tolerances of the auxiliary step, two ellipses | 1e-9, 3.09e-3 (position / ℓ), 1.99e-3 (angle), 3.97e-7 (area) | `QUOTIENT_GATES_BIE`, `src/torch/solver/quotient_gates_bie.py` |
+| (ii), (iii) tolerances of the auxiliary step, annulus run | 1e-9, 1.396e-2, 3.29e-5, 3.97e-7 | `QUOTIENT_GATES`, `src/torch/solver/quotient_gates.py` (see the note below) |
+| (iii) three consecutive steps, algebraic residual | 3, 1e-12 | `exact_merger_benchmark.py`, `EPS_ALG` in `ghost_compression.py` |
+| (iv) removed arcs | distance to the other loop ≤ 0.08 | `--cut-gap` |
+| (iv) smoothing, correction | 12 sweeps over 6 neighbors on each side, Newton with residual 1e-10 | `src/torch/solver/arc_splice.py` |
+
+Note on the annulus run. Its merging step was checked against the tolerances
+of `quotient_gates.py` (the values stored in `results/exact_merger/exact_merger_bie.json`).
+The present code selects `quotient_gates_bie.py` for that step. Both steps of
+that auxiliary comparison had zero displacement, so the outcome does not
+depend on the choice.
+
+The order of the particles along a loop is derived from the state
+(`certify_loop_orders`, `derived_loop_permutation` in
+`src/torch/perimeter/contact_complex.py`) wherever an event needs it.
+`tests/test_order_free_events.py` checks on stored states of the two-ellipses
+run that the criterion of (ii), the reconnection and the removal are unchanged
+under random permutations of the particles inside each loop.
 
 ## Tests
 

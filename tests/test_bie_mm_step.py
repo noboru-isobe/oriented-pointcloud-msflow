@@ -251,3 +251,25 @@ class TestMergeStep:
         assert sn.constraint_rank == 1
         assert sn.n_params == int(outer.sum()) - 1
         assert sn.bie_block_sizes == [3 * int(outer.sum())]
+
+
+class TestUnitVisibilityAblation:
+    """q == 1 ablation on the BIE backend: the sharp perimeter used by
+    the event gates must be the same energy as the frozen perimeter
+    of the step (total weight), not a q-weighted one."""
+
+    def _stepper(self):
+        v = generate_oriented_ellipse(128, 0.5, 1.0, (0.0, 0.0), "cpu", DT)
+        delta, tau = compute_recommended_params(v.positions)
+        cfg = _bie_cfg(delta, tau)
+        cfg.use_unit_coherence = True
+        cfg.perimeter_q_mode = "full"
+        return v, MMStepper(cfg)
+
+    def test_sharp_perimeter_is_total_weight(self):
+        v, st = self._stepper()
+        res = st.step(v)
+        assert res.frozen_perimeter_initial is not None
+        assert st.sharp_perimeter(v) == pytest.approx(
+            res.frozen_perimeter_initial, rel=1e-12)
+        assert torch.all(st.fixed_coherence == 1.0)

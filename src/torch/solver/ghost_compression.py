@@ -212,16 +212,20 @@ def compression_certificates(pos_src_out: _T, pos_comp: _T, z: _T,
     Positive homothety preserves all of these in exact arithmetic --
     the checks guard bookkeeping errors, not geometry."""
     out = {}
-    out["source_simple"] = polygon_is_simple(pos_src_out)
-    out["compressed_simple"] = polygon_is_simple(pos_comp)
-    sa_s = signed_shoelace(pos_src_out)
-    sa_c = signed_shoelace(pos_comp)
-    out["orientation_preserved"] = bool(sa_s * sa_c > 0)
     ds = pos_src_out - z
     dc = pos_comp - z
     ang_s = torch.atan2(ds[:, 1], ds[:, 0]).argsort()
     ang_c = torch.atan2(dc[:, 1], dc[:, 0]).argsort()
     out["cyclic_order_preserved"] = bool(torch.equal(ang_s, ang_c))
+    # the polygon checks use the cyclic order DERIVED from the source
+    # (angular sort about z), transported to the compressed loop --
+    # never the order in which the particles are stored
+    src_o, comp_o = pos_src_out[ang_s], pos_comp[ang_s]
+    out["source_simple"] = polygon_is_simple(src_o)
+    out["compressed_simple"] = polygon_is_simple(comp_o)
+    sa_s = signed_shoelace(src_o)
+    sa_c = signed_shoelace(comp_o)
+    out["orientation_preserved"] = bool(sa_s * sa_c > 0)
     c_comp = polygon_centroid(pos_comp)
     scale = float(pos_src_out.norm(dim=1).max())
     out["centroid_residual"] = float((c_comp - z).norm())

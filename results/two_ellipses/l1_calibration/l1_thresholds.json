@@ -1,0 +1,13 @@
+{
+ "eps_anti_max": 0.05073945624503051,
+ "mass_balance_max": 0.05,
+ "raw_current_rel_max": 0.033846620789570826,
+ "provenance": {
+  "family": "analytic facing-parabola",
+  "n_samples": 400,
+  "jitter_max": 0.05,
+  "h_ref": 0.02454369260617026,
+  "rule": "clean-family envelope (max), fixed before any L1 shadow; L-A3 states are validation only",
+  "mass_balance_floor_source": "L0-0 spacing pin h_max/h_min < 1.05"
+ }
+}

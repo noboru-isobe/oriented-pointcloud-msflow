@@ -59,7 +59,14 @@ R = Path("results/two_ellipses")
 def window_certificate(pos, ang, m1, delta, tau, thr, gamma=1.5):
     """L1 h-window extraction (cyclic canonicalization, certified
     order, no flip) + certificate; returns (rec or None, certified,
-    failing)."""
+    failing). The order of the particles along each loop is DERIVED
+    from the source geometry (never the storage order): the state is
+    permuted by derived_loop_permutation on entry."""
+    from src.torch.perimeter.contact_complex import (
+        derived_loop_permutation,
+    )
+    perm = derived_loop_permutation(pos, (~m1).long())
+    pos, ang, m1 = pos[perm], ang[perm], m1[perm]
     nor = torch.stack([ang.cos(), ang.sin()], 1)
     m = teb.resolve_m(pos, nor, delta, tau)
     pa, pb = pos[m1], pos[~m1]

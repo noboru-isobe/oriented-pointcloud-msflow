@@ -58,16 +58,31 @@ def main():
     ap.add_argument("--tag", default="")
     ap.add_argument("--metric", default="grid", choices=("grid", "bie"))
     ap.add_argument("--bridge-gap", type=float, default=1.0)
+    ap.add_argument("--shape", default="flower",
+                    choices=("flower", "ellipse"),
+                    help="ellipse: the left ellipse of the two-ellipses "
+                         "benchmark alone (isolated reference for the "
+                         "pre-contact interaction)")
+    ap.add_argument("--unit-q", action="store_true",
+                    help="q == 1 ablation (perimeter term = total "
+                         "weight)")
     args = ap.parse_args()
     torch.set_default_dtype(torch.float64)
     OUT.mkdir(parents=True, exist_ok=True)
-    L = flower_perimeter(args.petals, args.r_in, args.r_out)
-    n = int(round(L / H_REF))
-    v0 = generate_oriented_flower(n, n_petals=args.petals,
-                                  inner_radius=args.r_in,
-                                  outer_radius=args.r_out,
-                                  device="cpu", dtype=torch.float64,
-                                  initial_sampling="arc_length")
+    if args.shape == "ellipse":
+        L = teb.ellipse_perimeter(teb.A_EL, teb.B_EL)
+        n = round(L / H_REF)
+        v0 = teb.generate_oriented_ellipse(
+            n, teb.A_EL, teb.B_EL, (-teb.CX, 0.0), "cpu",
+            torch.float64, initial_sampling="arc_length")
+    else:
+        L = flower_perimeter(args.petals, args.r_in, args.r_out)
+        n = int(round(L / H_REF))
+        v0 = generate_oriented_flower(n, n_petals=args.petals,
+                                      inner_radius=args.r_in,
+                                      outer_radius=args.r_out,
+                                      device="cpu", dtype=torch.float64,
+                                      initial_sampling="arc_length")
     pos, ang = v0.positions.clone(), v0.angles.clone()
     seg = (pos.roll(-1, 0) - pos).norm(dim=1)
     print(f"flower: L={L:.5f} N={n} spacing {seg.mean():.5f} "
@@ -80,7 +95,11 @@ def main():
     cfg.time_step = args.dt
     cfg.grid_bulk_first_moment_rows = True
     cfg.grid_bulk_first_moment_rows_form = "current_centered"
-    meta = dict(kind="flower", petals=args.petals, r_in=args.r_in,
+    if args.unit_q:
+        cfg.use_unit_coherence = True
+        cfg.perimeter_q_mode = "full"
+        cfg.redistribution_q_policy = "stale_full"
+    meta = dict(kind=args.shape, unit_q=args.unit_q, petals=args.petals, r_in=args.r_in,
                 r_out=args.r_out, L=L, N=n, h_ref=H_REF, delta=delta,
                 tau=tau, dt=args.dt, grid=args.grid,
                 metric=args.metric,
@@ -93,7 +112,9 @@ def main():
                      if cfg.bie_metric is not None else None),
                 sigma=teb.SIGMA, stop_reason=None, error=None)
     series, states = [], {0: dict(positions=pos.clone(), angles=ang.clone())}
-    out_json = OUT / f"flower_production{args.tag}.json"
+    stem = ("flower_production" if args.shape == "flower"
+            else "ellipse_single")
+    out_json = OUT / f"{stem}{args.tag}.json"
     t0 = time.time()
     A0 = None
 
@@ -103,7 +124,7 @@ def main():
         tmp.write_text(json.dumps(dict(meta=meta, series=series),
                                   indent=1, default=str))
         tmp.replace(out_json)
-        torch.save(states, OUT / f"flower_production{args.tag}_states.pt")
+        torch.save(states, OUT / f"{stem}{args.tag}_states.pt")
 
     def cb(step, res):
         nonlocal A0

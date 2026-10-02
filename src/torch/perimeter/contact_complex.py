@@ -142,6 +142,16 @@ def certify_loop_orders(positions: _T, loop_labels: _T,
     return out
 
 
+def derived_loop_permutation(positions: _T, loop_labels: _T) -> _T:
+    """Global particle ids listing the loops in increasing label, each
+    in the cyclic order DERIVED from the geometry (certify_loop_orders,
+    fail-closed). An event that needs the order of the particles along
+    a loop permutes its source state by this and never reads the order
+    in which the particles happen to be stored."""
+    orders = certify_loop_orders(positions, loop_labels)
+    return torch.cat([orders[lb]["index"] for lb in sorted(orders)])
+
+
 # ---------------------------------------------------------------------
 # the complex
 # ---------------------------------------------------------------------
