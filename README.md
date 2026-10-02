@@ -219,6 +219,80 @@ The order of the particles along a loop is derived from the state
 run that the criterion of (ii), the reconnection and the removal are unchanged
 under random permutations of the particles inside each loop.
 
+### Details that the paper leaves to this file
+
+Appendix A of the paper states the rules of the implementation. The details
+below complete it.
+
+- **Bandwidths.** `τ` equals twice the value of the density estimator produced
+  at a particle by that particle alone, so that the truncation acts only on
+  particles with fewer than about one neighbor within distance `δ`. In the
+  three runs `δ ≈ 0.12` and `τ ≈ 0.05`–`0.08`.
+- **Metric.** Particles with zero mass (none occurred in the reported runs)
+  are excluded from the collocation. A row of the constraint matrix which
+  becomes a combination of the unit rows of the fixed particles (the relative
+  area row of a pair of entirely coincident loops) is dropped. At the stored
+  states of the three runs (every 25 steps) the ratio of the residual `|μ|` to
+  `|D^{1/2} V(s)|` is below 1.6e-2, with median 1.9e-3
+  (`scripts/experiments/bie_compat_residual.py`).
+- **Redistribution.** The density is recomputed on the current positions at
+  every substep, and the tangents and curvatures are held at their values at
+  the beginning of the redistribution. Loops that already meet the tolerance
+  are left unchanged. A substep is accepted only if it does not increase the
+  coefficient of variation of its loop. It is scaled by `2^-k`, `k = 0, …, 7`,
+  and the loop is left unchanged if no scaling is accepted. The total
+  displacement of a particle over the whole redistribution is bounded.
+- **Winding numbers.** For every loop, eight points `p = x_i − ϱ u_i` are
+  placed on its inner side at each depth `ϱ ∈ {1.5, 2.5, 4} ℓ`. The winding
+  numbers of all loops about them are computed and rounded to integers after
+  taking the median over the eight points. The medians must lie within 0.15 of
+  an integer and the rounded vectors must coincide at the three depths.
+  Otherwise the run is stopped.
+- **(i) Switch of the visibility.** The contact region consists of the
+  particles of each loop whose `σ`-neighborhood meets the other loop. It must
+  consist of exactly one pair of arcs with at least three particles each.
+- **(ii) Merging of the constraints, two ellipses.** The particles of each
+  loop within distance `1.5 ℓ` of the other loop must form one arc on each
+  loop. Each particle of one arc is paired with the nearest particle of the
+  other arc, and the pairing must preserve the order of the particles along
+  the arcs. Three quantities must be below their thresholds, namely the
+  anti-parallelism `max (1 + u_i·u_j)` over the pairs, the relative difference
+  of the masses of the two arcs, and the norm of the sum of `w_i u_i` over the
+  two arcs, tapered toward the ends of each arc and taken relative to the
+  tapered mass. The thresholds were fixed on an analytic family of facing
+  parabolic arcs.
+- **(ii) Merging of the constraints, annulus.** The contact is simultaneous
+  along a circle, and the quantities are evaluated on the whole loops, namely the
+  mass-weighted 90th percentile of the distances to the nearest particle of
+  the other loop over `ℓ`, the mass fraction of each loop within distance
+  `1.5 ℓ` of the other loop, the mass-weighted mean of `|u_i + u_j|²` over the
+  nearest pairs, the relative difference of the masses, and the relative
+  residual `‖G∗(T_1+T_2)‖² / (‖G∗T_1‖² + ‖G∗T_2‖²)` of the currents `T_1`,
+  `T_2` of the two loops mollified by a Gaussian `G` of width `σ`.
+- **(ii) Auxiliary step.** The point cloud is advanced once with the separate
+  rows and once with the merged rows. The differences in the individual and
+  merged areas, in the positions and normals, and in the objective must stay
+  below the tolerances.
+- **(iii) Removal of the canceling pair.** In the concentric benchmark the gap
+  is the difference of the mean radii of the two loops. The areas are those of
+  the polygons through the particles, joined in the cyclic order derived from
+  the state. After the removal the loop must be simple, keep its orientation
+  and not increase the length of the polygon through its particles, and the
+  auxiliary step advanced from the point cloud after the removal must agree
+  with the one advanced from the point cloud before it within the tolerances.
+- **(iv) Reconnection of the arcs.** After the two cubic Hermite arcs are
+  inserted, the polygon is smoothed near the new particles, and a least-norm
+  normal displacement of the new loop, closed by a Newton iteration on the
+  exact polygon area and first moment, restores the merged area and first
+  moment. Both candidate reconnections are constructed. The one kept gives a
+  single simple loop with outward orientation, no increase of the length of
+  the polygon through the particles, a spacing within the bounds of the
+  existing loops, and connecting arcs crossing the former gap.
+- **Thresholds.** All thresholds were fixed before the reported runs, on
+  analytic families of facing arcs, on static configurations in which the
+  event should or should not take place, or on the pre-contact part of earlier
+  trajectories. None was adjusted on the reported runs.
+
 ## Tests
 
 ```bash

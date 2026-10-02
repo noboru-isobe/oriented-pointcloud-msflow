@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Mullins–Sekerka flow via oriented point cloud varifolds"
+type: software
+authors:
+  - family-names: Isobe
+    given-names: Noboru
+license: MIT
+repository-code: "https://github.com/noboru-isobe/oriented-pointcloud-msflow"
