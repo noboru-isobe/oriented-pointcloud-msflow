@@ -181,7 +181,7 @@ def sample_scenario(
 # BB bandwidth schedule
 # =============================================================================
 
-SIGMA_RULE = "paper"   # "paper": a = β r/(d−1+2β) (Figure 1 of the paper); "optimal": a = a* of Corollary 4.2
+SIGMA_RULE = "paper"   # "paper": a = β r/(d−1+2β) (Figure 1 of the paper); "optimal": a = r/(d+β) of Corollary 4.2
 
 
 def sigma_exponent(beta: float, rule: str = None) -> float:
@@ -189,8 +189,9 @@ def sigma_exponent(beta: float, rule: str = None) -> float:
 
     "paper"   : a = β r/(d−1+2β)  (1/9 for β=1, 1/12 for β=1/2 at d=2, c=1);
                 the sequence used for the published Figure 1.
-    "optimal" : a = a* = min{β* r/(d−1+β), r/(d+β)} of Corollary 4.2
-                (1/9 for both β=1 and β=1/2 at d=2, c=1).
+    "optimal" : a = r/(d+β) of Corollary 4.2, which balances the first two
+                terms of the bound of Theorem 4.1
+                (1/9 for β=1, 2/15 for β=1/2 at d=2, c=1).
     """
     rule = rule or SIGMA_RULE
     c = min(ALPHA, GAMMA)
@@ -214,35 +215,33 @@ def bandwidths(
     """
     c = min(ALPHA, GAMMA)
     delta_N = c_delta * N ** (-1.0 / (D - 1 + 2 * c))
-    a_star = sigma_exponent(beta)
-    sigma_N = c_sigma * N ** (-a_star)
+    a = sigma_exponent(beta)
+    sigma_N = c_sigma * N ** (-a)
     tau = c_tau * THETA_MINUS
     return delta_N, sigma_N, tau
 
 
-def optimal_sigma_exponent(beta: float, beta_star: float = None) -> float:
-    """a* = min{β* r/(d−1+β), r/(d+β)} with r = c/(d−1+2c); β* = β on Σ = ∅."""
+def optimal_sigma_exponent(beta: float) -> float:
+    """a = r/(d+β) with r = c/(d−1+2c) (Corollary 4.2 of the paper)."""
     c = min(ALPHA, GAMMA)
     r = c / (D - 1 + 2 * c)
-    if beta_star is None:
-        beta_star = beta
-    return min(beta_star * r / (D - 1 + beta), r / (D + beta))
+    return r / (D + beta)
 
 
-def theoretical_slope(beta: float, beta_star: float = None) -> float:
-    """Predicted slope of log E_N vs log N: the exponent of the bound (4.2)
-    of the paper evaluated along δ_N = N^{−1/(d−1+2c)}, σ_N = N^{−a},
-    a = sigma_exponent(β):
-        −min{aβ, r − d a, β* r − (d−1) a, 1 − (d−1) a, (1 − (d−1) a)/2}.
+def theoretical_slope(beta: float) -> float:
+    """Predicted slope of log E_N vs log N: the exponent of the bound of
+    Theorem 4.1 of the paper,
+        E|P̂ − P| ≤ C (σ^β + σ^{−d} ε(δ,N) + 1/(N σ^{d−1}) + 1/sqrt(N σ^{d−1})),
+    evaluated along δ_N = N^{−1/(d−1+2c)} (so that ε(δ_N,N) ≤ C N^{−r}) and
+    σ_N = N^{−a}, a = sigma_exponent(β):
+        −min{aβ, r − d a, (1 − (d−1) a)/2}
+    (the term 1/(N σ^{d−1}) is dominated by its square root once N σ^{d−1} ≥ 1).
     (d=2, c=1: −1/9 for β=1; −1/24 for β=1/2 with the "paper" rule,
-    −1/18 with the "optimal" rule.)"""
+    −1/15 with the "optimal" rule, the rate of Corollary 4.2.)"""
     c = min(ALPHA, GAMMA)
     r = c / (D - 1 + 2 * c)
-    if beta_star is None:
-        beta_star = beta
     a = sigma_exponent(beta)
-    return -min(a * beta, r - D * a, beta_star * r - (D - 1) * a,
-                1 - (D - 1) * a, (1 - (D - 1) * a) / 2)
+    return -min(a * beta, r - D * a, (1 - (D - 1) * a) / 2)
 
 
 # =============================================================================
